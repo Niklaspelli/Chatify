@@ -2,9 +2,10 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./Auth/ProtectedRoute";
 import Login from "./Pages/Login";
-import Navbar from "./Navbar";
+import Navbar from "./Comp/Navbar";
 
 import Register from "./Pages/Register";
+import Chat from "./Pages/Chat";
 
 function App() {
   return (
@@ -12,12 +13,10 @@ function App() {
       <Navbar />
       <div>
         <Routes>
-          <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/Register" element={<Register />} />
           <Route element={<ProtectedRoute />}>
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/userprofile" element={<UserProfile />} />
+            <Route path="/chat" element={<Chat />} />
             {/* handle other routes */}
           </Route>
         </Routes>

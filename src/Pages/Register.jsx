@@ -5,15 +5,13 @@ import {
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "./index.css";
+import "../index.css";
 import { Container, Button, Row, Col } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 
 const USER_REGEX = /^[A-Öa-ö][A-z0-9-_åäöÅÄÖ]{3,23}$/;
 const PWD_REGEX =
   /^(?=.*[a-zåäö])(?=.*[A-ÖÅÄÖ])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-
-const REGISTER_URL = "/users";
 
 function Register() {
   const userRef = useRef();
@@ -33,6 +31,9 @@ function Register() {
 
   const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState(false);
+  const [csrfToken, setCsrfToken] = useState("");
+  const [email, setEmail] = useState("");
+  const [emailFocus, setEmailFocus] = useState(false);
 
   useEffect(() => {
     userRef.current.focus();
@@ -40,45 +41,73 @@ function Register() {
 
   useEffect(() => {
     const result = USER_REGEX.test(user);
-    console.log(result);
-    console.log(user);
     setValidName(result);
   }, [user]);
 
   useEffect(() => {
     const result = PWD_REGEX.test(pwd);
-    console.log(result);
-    console.log(pwd);
     setValidPwd(result);
     const match = pwd === matchPwd;
     setValidMatch(match);
   }, [pwd, matchPwd]);
 
+  useEffect(() => {
+    fetchCsrfToken();
+  }, []);
+
+  const fetchCsrfToken = async () => {
+    try {
+      const response = await fetch("https://chatify-api.up.railway.app/csrf", {
+        method: "PATCH",
+        credentials: "include", // Include cookies
+      });
+      if (!response.ok) {
+        throw new Error("Failed to fetch CSRF token");
+      }
+      const data = await response.json();
+      setCsrfToken(data.csrfToken);
+    } catch (error) {
+      console.error("Error fetching CSRF token:", error.message);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    //om knappen är eneblad med JS hackning
+
+    // Validate inputs before making the request
     const v1 = USER_REGEX.test(user);
     const v2 = PWD_REGEX.test(pwd);
     if (!v1 || !v2) {
       setErrMsg("Invalid Entry");
       return;
     }
+
     try {
-      const response = await fetch("http://localhost:3000/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ user, pwd }),
-      });
+      const response = await fetch(
+        "https://chatify-api.up.railway.app/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: user,
+            password: pwd,
+            email: email,
+          }),
+          credentials: "include", // Include cookies
+        }
+      );
+
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
+
       const data = await response.json();
       console.log(data);
       setSuccess(true);
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error("Registration error:", error);
       setErrMsg("Registration Failed");
       errRef.current.focus();
     }
@@ -102,154 +131,184 @@ function Register() {
           >
             {errMsg}
           </p>
-          <Row className="justify-content-center align-items-center h-100">
-            <h2>Skapa Konto</h2>
-            <Col md={6} lg={4} className="justify-content-center">
-              <label htmlFor="floatingInputCustom">
-                Användarnamn:
-                <span className={validName ? "valid" : "hide"}>
-                  <FontAwesomeIcon icon={faCheck} />
-                </span>
-                <span className={validName || !user ? "hide" : "invalid"}>
-                  <FontAwesomeIcon icon={faTimes} />
-                </span>
-              </label>
-              <Form.Floating
-                className="mb-1"
-                inline
-                style={{ width: "400px", display: "justify-content-center" }}
-              >
-                <Form.Control
-                  type="text"
-                  id="floatingInputCustom"
-                  ref={userRef}
-                  autoComplete="off"
-                  onChange={(e) => setUser(e.target.value)}
-                  required
-                  aria-invalid={validName ? "false" : "true"}
-                  aria-describedby="uidnote"
-                  onFocus={() => setUserFocus(true)}
-                  onBlur={() => setUserFocus(false)}
-                  style={{
-                    backgroundColor: "grey",
-                    color: "white",
-                    border: "none",
-                  }}
-                />
-              </Form.Floating>
-              <p
-                id="uidnote"
-                className={
-                  userFocus && user && !validName ? "instructions" : "offscreen"
-                }
-              >
-                <FontAwesomeIcon icon={faInfoCircle} />
-                4 till 24 tecken.
-                <br />
-                Måste börja med en bokstav.
-                <br />
-                Bokstäver, nummer, understreck, bindesstreck är tillåtet.
-              </p>
-              <label htmlFor="floatingInputCustom">
-                Lösenord:
-                <FontAwesomeIcon
-                  icon={faCheck}
-                  className={validPwd ? "valid" : "hide"}
-                />
-                <FontAwesomeIcon
-                  icon={faTimes}
-                  className={validPwd || !validPwd ? "hide" : "invalid"}
-                />
-              </label>
-              <Form.Floating
-                className="mb-1"
-                inline
-                style={{ width: "400px", display: "justify-content-center" }}
-              >
-                <Form.Control
-                  type="password"
-                  id="floatingInputCustom"
-                  onChange={(e) => setPwd(e.target.value)}
-                  required
-                  aria-invalid={validPwd ? "false" : "true"}
-                  aria-describedby="pwdnote"
-                  onFocus={() => setPwdFocus(true)}
-                  onBlur={() => setPwdFocus(false)}
-                  style={{
-                    backgroundColor: "grey",
-                    color: "white",
-                    border: "none",
-                  }}
-                />
-              </Form.Floating>
-              <p
-                id="pwdnote"
-                className={pwdFocus && !validPwd ? "instructions" : "offscreen"}
-              >
-                <FontAwesomeIcon icon={faInfoCircle} />
-                8 till 24 tecken.
-                <br />
-                Måste inkludera både stora och små bokstäver, en siffra och ett
-                specialtecken.
-                <br />
-                Tillåtna specialtecken är:
-                <span aria-label="exclamation mark">!</span>
-                <span aria-label="at symbol">@</span>{" "}
-                <span aria-label="hashtag">#</span>
-                <span aria-label="dollar sign">$</span>{" "}
-                <span aria-label="percent">%</span>
-              </p>
-              <label htmlFor="floatingInputCustom">
-                Upprepa Lösenord:
-                <FontAwesomeIcon
-                  icon={faCheck}
-                  className={validMatch && matchPwd ? "valid" : "hide"}
-                />
-                <FontAwesomeIcon
-                  icon={faTimes}
-                  className={validMatch || !matchPwd ? "hide" : "invalid"}
-                />
-              </label>
-              <Form.Floating
-                className="mb-1"
-                inline
-                style={{ width: "400px", display: "justify-content-center" }}
-              >
-                <Form.Control
-                  type="password"
-                  id="confirm_pwd"
-                  onChange={(e) => setMatchPwd(e.target.value)}
-                  required
-                  aria-invalid={validMatch ? "false" : "true"}
-                  aria-describedby="confirmnote"
-                  onFocus={() => setMatchFocus(true)}
-                  onBlur={() => setMatchFocus(false)}
-                  style={{
-                    backgroundColor: "grey",
-                    color: "white",
-                    border: "none",
-                  }}
-                />
-              </Form.Floating>
-              <p
-                id="confirmnote"
-                className={
-                  matchFocus && !validMatch ? "instructions" : "offscreen"
-                }
-              >
-                <FontAwesomeIcon icon={faInfoCircle} />
-                Måste vara samma som första lösenordet
-              </p>
-            </Col>{" "}
-          </Row>
-          <Button
-            style={{ backgroundColor: "black" }}
-            disabled={!validName || !validPwd || !validMatch ? true : false}
-            type="submit"
-            onClick={(e) => handleSubmit(e)}
-          >
-            Registrera
-          </Button>
+          <form onSubmit={handleSubmit}>
+            <Row className="justify-content-center align-items-center h-100">
+              <h2>Skapa Konto</h2>
+              <Col md={6} lg={4} className="justify-content-center">
+                <label htmlFor="username">
+                  Användarnamn:
+                  <span className={validName ? "valid" : "hide"}>
+                    <FontAwesomeIcon icon={faCheck} />
+                  </span>
+                  <span className={validName || !user ? "hide" : "invalid"}>
+                    <FontAwesomeIcon icon={faTimes} />
+                  </span>
+                </label>
+                <Form.Floating
+                  className="mb-1"
+                  inline
+                  style={{ width: "400px", display: "justify-content-center" }}
+                >
+                  <Form.Control
+                    type="text"
+                    id="username"
+                    ref={userRef}
+                    autoComplete="off"
+                    onChange={(e) => setUser(e.target.value)}
+                    required
+                    aria-invalid={validName ? "false" : "true"}
+                    aria-describedby="uidnote"
+                    onFocus={() => setUserFocus(true)}
+                    onBlur={() => setUserFocus(false)}
+                    style={{
+                      backgroundColor: "grey",
+                      color: "white",
+                      border: "none",
+                    }}
+                  />
+                </Form.Floating>
+                <p
+                  id="uidnote"
+                  className={
+                    userFocus && user && !validName
+                      ? "instructions"
+                      : "offscreen"
+                  }
+                >
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  4 till 24 tecken.
+                  <br />
+                  Måste börja med en bokstav.
+                  <br />
+                  Bokstäver, nummer, understreck, bindesstreck är tillåtet.
+                </p>
+                <label htmlFor="email">E-Mail:</label>
+                <Form.Floating
+                  className="mb-1"
+                  inline
+                  style={{ width: "400px", display: "justify-content-center" }}
+                >
+                  <Form.Control
+                    type="email"
+                    id="email"
+                    autoComplete="off"
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    aria-invalid={email ? "false" : "true"}
+                    aria-describedby="emailnote"
+                    onFocus={() => setEmailFocus(true)}
+                    onBlur={() => setEmailFocus(false)}
+                    style={{
+                      backgroundColor: "grey",
+                      color: "white",
+                      border: "none",
+                    }}
+                  />
+                </Form.Floating>
+
+                <label htmlFor="password">
+                  Lösenord:
+                  <FontAwesomeIcon
+                    icon={faCheck}
+                    className={validPwd ? "valid" : "hide"}
+                  />
+                  <FontAwesomeIcon
+                    icon={faTimes}
+                    className={validPwd || !validPwd ? "hide" : "invalid"}
+                  />
+                </label>
+
+                <Form.Floating
+                  className="mb-1"
+                  inline
+                  style={{ width: "400px", display: "justify-content-center" }}
+                >
+                  <Form.Control
+                    type="password"
+                    id="password"
+                    onChange={(e) => setPwd(e.target.value)}
+                    required
+                    aria-invalid={validPwd ? "false" : "true"}
+                    aria-describedby="pwdnote"
+                    onFocus={() => setPwdFocus(true)}
+                    onBlur={() => setPwdFocus(false)}
+                    style={{
+                      backgroundColor: "grey",
+                      color: "white",
+                      border: "none",
+                    }}
+                  />
+                </Form.Floating>
+                <p
+                  id="pwdnote"
+                  className={
+                    pwdFocus && !validPwd ? "instructions" : "offscreen"
+                  }
+                >
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  8 till 24 tecken.
+                  <br />
+                  Måste inkludera både stora och små bokstäver, en siffra och
+                  ett specialtecken.
+                  <br />
+                  Tillåtna specialtecken är:
+                  <span aria-label="exclamation mark">!</span>
+                  <span aria-label="at symbol">@</span>{" "}
+                  <span aria-label="hashtag">#</span>
+                  <span aria-label="dollar sign">$</span>{" "}
+                  <span aria-label="percent">%</span>
+                </p>
+                <label htmlFor="confirm_pwd">
+                  Upprepa Lösenord:
+                  <FontAwesomeIcon
+                    icon={faCheck}
+                    className={validMatch && matchPwd ? "valid" : "hide"}
+                  />
+                  <FontAwesomeIcon
+                    icon={faTimes}
+                    className={validMatch || !matchPwd ? "hide" : "invalid"}
+                  />
+                </label>
+                <Form.Floating
+                  className="mb-1"
+                  inline
+                  style={{ width: "400px", display: "justify-content-center" }}
+                >
+                  <Form.Control
+                    type="password"
+                    id="confirm_pwd"
+                    onChange={(e) => setMatchPwd(e.target.value)}
+                    required
+                    aria-invalid={validMatch ? "false" : "true"}
+                    aria-describedby="confirmnote"
+                    onFocus={() => setMatchFocus(true)}
+                    onBlur={() => setMatchFocus(false)}
+                    style={{
+                      backgroundColor: "grey",
+                      color: "white",
+                      border: "none",
+                    }}
+                  />
+                </Form.Floating>
+                <p
+                  id="confirmnote"
+                  className={
+                    matchFocus && !validMatch ? "instructions" : "offscreen"
+                  }
+                >
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  Måste vara samma som första lösenordet
+                </p>
+              </Col>{" "}
+            </Row>
+            <Button
+              style={{ backgroundColor: "black" }}
+              disabled={!validName || !validPwd || !validMatch}
+              type="submit"
+            >
+              Registrera
+            </Button>
+          </form>
         </section>
       )}
     </Container>
