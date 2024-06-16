@@ -5,13 +5,14 @@ import {
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "../index.css";
 import { Container, Button, Row, Col } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 
 const USER_REGEX = /^[A-Öa-ö][A-z0-9-_åäöÅÄÖ]{3,23}$/;
 const PWD_REGEX =
   /^(?=.*[a-zåäö])(?=.*[A-ÖÅÄÖ])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 function Register() {
   const userRef = useRef();
@@ -34,6 +35,7 @@ function Register() {
   const [csrfToken, setCsrfToken] = useState("");
   const [email, setEmail] = useState("");
   const [emailFocus, setEmailFocus] = useState(false);
+  const [validEmail, setValidEmail] = useState(false);
 
   useEffect(() => {
     userRef.current.focus();
@@ -45,21 +47,27 @@ function Register() {
   }, [user]);
 
   useEffect(() => {
+    const result = EMAIL_REGEX.test(email);
+    setValidEmail(result);
+  }, [email]);
+
+  useEffect(() => {
     const result = PWD_REGEX.test(pwd);
     setValidPwd(result);
     const match = pwd === matchPwd;
     setValidMatch(match);
   }, [pwd, matchPwd]);
 
-  useEffect(() => {
+  /*   useEffect(() => {
     fetchCsrfToken();
-  }, []);
+  }, []); */
 
-  const fetchCsrfToken = async () => {
+  /*   const fetchCsrfToken = async () => {
     try {
       const response = await fetch("https://chatify-api.up.railway.app/csrf", {
-        method: "PATCH",
-        credentials: "include", // Include cookies
+        method: "PATCH", // Use "GET" to fetch CSRF token
+        credentials: "include", // Include credentials (cookies)
+        mode: "cors",
       });
       if (!response.ok) {
         throw new Error("Failed to fetch CSRF token");
@@ -68,13 +76,13 @@ function Register() {
       setCsrfToken(data.csrfToken);
     } catch (error) {
       console.error("Error fetching CSRF token:", error.message);
+      setErrMsg("Failed to fetch CSRF token");
     }
-  };
+  }; */
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate inputs before making the request
     const v1 = USER_REGEX.test(user);
     const v2 = PWD_REGEX.test(pwd);
     if (!v1 || !v2) {
@@ -94,8 +102,10 @@ function Register() {
             username: user,
             password: pwd,
             email: email,
+            // Make sure csrfToken is included
           }),
-          credentials: "include", // Include cookies
+          credentials: "include",
+          mode: "cors",
         }
       );
 
@@ -183,6 +193,12 @@ function Register() {
                   Bokstäver, nummer, understreck, bindesstreck är tillåtet.
                 </p>
                 <label htmlFor="email">E-Mail:</label>
+                <span className={validEmail ? "valid" : "hide"}>
+                  <FontAwesomeIcon icon={faCheck} />
+                </span>
+                <span className={validEmail || !email ? "hide" : "invalid"}>
+                  <FontAwesomeIcon icon={faTimes} />
+                </span>
                 <Form.Floating
                   className="mb-1"
                   inline
@@ -194,7 +210,7 @@ function Register() {
                     autoComplete="off"
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    aria-invalid={email ? "false" : "true"}
+                    aria-invalid={validEmail ? "false" : "true"}
                     aria-describedby="emailnote"
                     onFocus={() => setEmailFocus(true)}
                     onBlur={() => setEmailFocus(false)}
@@ -205,6 +221,17 @@ function Register() {
                     }}
                   />
                 </Form.Floating>
+                <p
+                  id="emailnote"
+                  className={
+                    emailFocus && email && !validEmail
+                      ? "instructions"
+                      : "offscreen"
+                  }
+                >
+                  <FontAwesomeIcon icon={faInfoCircle} />
+                  Ange en giltig e-postadress.
+                </p>
 
                 <label htmlFor="password">
                   Lösenord:
@@ -297,17 +324,16 @@ function Register() {
                   }
                 >
                   <FontAwesomeIcon icon={faInfoCircle} />
-                  Måste vara samma som första lösenordet
+                  Måste matcha det första lösenordet.
                 </p>
-              </Col>{" "}
+                <Button
+                  disabled={!validName || !validPwd || !validMatch}
+                  className="btn btn-primary"
+                >
+                  Registrera
+                </Button>
+              </Col>
             </Row>
-            <Button
-              style={{ backgroundColor: "black" }}
-              disabled={!validName || !validPwd || !validMatch}
-              type="submit"
-            >
-              Registrera
-            </Button>
           </form>
         </section>
       )}
