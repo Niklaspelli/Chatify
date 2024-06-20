@@ -100,13 +100,15 @@ function Register() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "CSRF-Token": csrfToken,
           },
           body: JSON.stringify({
             username: user,
             password: pwd,
             email: email,
+            avatar: "",
+            csrfToken: csrfToken,
           }),
-          credentials: "include",
         }
       );
 
