@@ -27,7 +27,6 @@ const Login = () => {
     try {
       const response = await fetch("https://chatify-api.up.railway.app/csrf", {
         method: "PATCH",
-        credentials: "include", // Include cookies
       });
       if (!response.ok) {
         throw new Error("Failed to fetch CSRF token");
@@ -45,26 +44,27 @@ const Login = () => {
 
     try {
       const response = await fetch(
-        "https://chatify-api.up.railway.app/auth/register",
+        "https://chatify-api.up.railway.app/auth/token",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "CSRF-Token": csrfToken, // Include CSRF token in headers
+            "CSRF-Token": csrfToken,
           },
           body: JSON.stringify({
-            user: username,
-            pwd: password,
+            username: username,
+            password: password,
+            csrfToken: csrfToken,
           }),
         }
       );
 
-      const data = await response.json();
-
       if (!response.ok) {
+        const data = await response.json();
         throw new Error(data.error || "Login failed");
       }
 
+      const data = await response.json();
       const token = data.token;
       const loggedInUsername = data.username;
       setLoggedInUsername(loggedInUsername);
@@ -72,9 +72,8 @@ const Login = () => {
       localStorage.setItem("loggedInUsername", loggedInUsername);
       fakeAuth.signIn(() => {
         setCorrectCredentials(true);
+        navigate("/chat", { state: { username: loggedInUsername } });
       });
-
-      navigate("/chat", { state: { username: loggedInUsername } });
     } catch (error) {
       setCorrectCredentials(false);
       console.error("Login failed:", error.message);
