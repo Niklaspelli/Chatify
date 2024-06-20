@@ -11,7 +11,6 @@ import Form from "react-bootstrap/Form";
 const USER_REGEX = /^[A-Öa-ö][A-z0-9-_åäöÅÄÖ]{3,23}$/;
 const PWD_REGEX =
   /^(?=.*[a-zåäö])(?=.*[A-ÖÅÄÖ])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
-
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 function Register() {
@@ -32,10 +31,12 @@ function Register() {
 
   const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState(false);
-  const [csrfToken, setCsrfToken] = useState("");
+
   const [email, setEmail] = useState("");
   const [emailFocus, setEmailFocus] = useState(false);
   const [validEmail, setValidEmail] = useState(false);
+
+  const [csrfToken, setCsrfToken] = useState("");
 
   useEffect(() => {
     userRef.current.focus();
@@ -58,27 +59,29 @@ function Register() {
     setValidMatch(match);
   }, [pwd, matchPwd]);
 
-  /*   useEffect(() => {
+  useEffect(() => {
     fetchCsrfToken();
-  }, []); */
+  }, []);
 
-  /*   const fetchCsrfToken = async () => {
+  const fetchCsrfToken = async () => {
     try {
       const response = await fetch("https://chatify-api.up.railway.app/csrf", {
-        method: "PATCH", // Use "GET" to fetch CSRF token
-        credentials: "include", // Include credentials (cookies)
-        mode: "cors",
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
+
       if (!response.ok) {
         throw new Error("Failed to fetch CSRF token");
       }
+
       const data = await response.json();
       setCsrfToken(data.csrfToken);
     } catch (error) {
-      console.error("Error fetching CSRF token:", error.message);
-      setErrMsg("Failed to fetch CSRF token");
+      console.error("Failed to fetch CSRF token:", error);
     }
-  }; */
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -102,10 +105,8 @@ function Register() {
             username: user,
             password: pwd,
             email: email,
-            // Make sure csrfToken is included
           }),
           credentials: "include",
-          mode: "cors",
         }
       );
 
@@ -122,7 +123,6 @@ function Register() {
       errRef.current.focus();
     }
   };
-
   return (
     <Container>
       {success ? (
@@ -156,7 +156,6 @@ function Register() {
                 </label>
                 <Form.Floating
                   className="mb-1"
-                  inline
                   style={{ width: "400px", display: "justify-content-center" }}
                 >
                   <Form.Control
@@ -201,7 +200,6 @@ function Register() {
                 </span>
                 <Form.Floating
                   className="mb-1"
-                  inline
                   style={{ width: "400px", display: "justify-content-center" }}
                 >
                   <Form.Control
@@ -241,13 +239,12 @@ function Register() {
                   />
                   <FontAwesomeIcon
                     icon={faTimes}
-                    className={validPwd || !validPwd ? "hide" : "invalid"}
+                    className={validPwd || !pwd ? "hide" : "invalid"}
                   />
                 </label>
 
                 <Form.Floating
                   className="mb-1"
-                  inline
                   style={{ width: "400px", display: "justify-content-center" }}
                 >
                   <Form.Control
@@ -298,7 +295,6 @@ function Register() {
                 </label>
                 <Form.Floating
                   className="mb-1"
-                  inline
                   style={{ width: "400px", display: "justify-content-center" }}
                 >
                   <Form.Control
@@ -307,9 +303,6 @@ function Register() {
                     onChange={(e) => setMatchPwd(e.target.value)}
                     required
                     aria-invalid={validMatch ? "false" : "true"}
-                    aria-describedby="confirmnote"
-                    onFocus={() => setMatchFocus(true)}
-                    onBlur={() => setMatchFocus(false)}
                     style={{
                       backgroundColor: "grey",
                       color: "white",
@@ -327,8 +320,12 @@ function Register() {
                   Måste matcha det första lösenordet.
                 </p>
                 <Button
-                  disabled={!validName || !validPwd || !validMatch}
-                  className="btn btn-primary"
+                  type="submit"
+                  disabled={
+                    !validName || !validPwd || !validMatch || !validEmail
+                      ? true
+                      : false
+                  }
                 >
                   Registrera
                 </Button>
