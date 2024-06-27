@@ -2,10 +2,10 @@ import React, { useCallback } from "react";
 
 const MessageList = ({ posts, onDelete, currentUser, token }) => {
   const handleDelete = useCallback(
-    async (postId) => {
+    async (msgId) => {
       try {
         const response = await fetch(
-          `https://chatify-api.up.railway.app/messages/${postId}`,
+          `https://chatify-api.up.railway.app/messages/${msgId}`,
           {
             method: "DELETE",
             headers: {
@@ -15,7 +15,7 @@ const MessageList = ({ posts, onDelete, currentUser, token }) => {
           }
         );
         if (response.ok) {
-          onDelete(postId);
+          onDelete(msgId);
         } else {
           console.error("Failed to delete post, status code:", response.status);
           const errorData = await response.json();
@@ -35,14 +35,14 @@ const MessageList = ({ posts, onDelete, currentUser, token }) => {
         {posts.map((post) => (
           <li key={post.id} className="message-border">
             <p>
-              <span className="username">{post.author}</span> skrev:
+              <span className="username">{post.userId}</span> skrev:
             </p>
 
             <div className="chat-bg">
               <p>{post.text}</p>
             </div>
 
-            {currentUser === post.author && (
+            {currentUser === post.userId && (
               <button onClick={() => handleDelete(post.id)}>Delete</button>
             )}
           </li>

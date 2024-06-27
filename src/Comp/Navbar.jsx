@@ -27,7 +27,7 @@ const Navbar = () => {
           )}
         </li>
         <li>
-          <Link to="/userprofile">Chat {isAuthenticated ? "" : "🔒"}</Link>
+          <Link to="/chat">Chat {isAuthenticated ? "" : "🔒"}</Link>
         </li>
       </ul>
     </nav>
