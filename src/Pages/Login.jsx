@@ -7,17 +7,9 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [correctCredentials, setCorrectCredentials] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [loggedInUsername, setLoggedInUsername] = useState("");
   const [csrfToken, setCsrfToken] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-
-  useEffect(() => {
-    const storedUsername = localStorage.getItem("loggedInUsername");
-    if (storedUsername) {
-      setLoggedInUsername(storedUsername);
-    }
-  }, []);
 
   useEffect(() => {
     fetchCsrfToken();
@@ -67,7 +59,6 @@ const Login = () => {
       const data = await response.json();
       const token = data.token;
       const loggedInUsername = data.username;
-      setLoggedInUsername(loggedInUsername);
       localStorage.setItem("token", token);
       localStorage.setItem("loggedInUsername", loggedInUsername);
       fakeAuth.signIn(() => {
@@ -109,14 +100,8 @@ const Login = () => {
           </span>
         </div>
       )}
-      {isLoading && <div>Laddar...</div>}
-      {location.state && location.state.protectedRoute && (
-        <div>Snälla logga in</div>
-      )}
-      {loggedInUsername && (
-        <div style={{ color: "red" }}>Welcome, {loggedInUsername}!</div>
-      )}
-      <Link to="/Register">Register</Link>
+      {isLoading && <div>Loading...</div>}
+      <Link to="/register">Register</Link>
     </div>
   );
 };

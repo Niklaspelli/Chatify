@@ -97,7 +97,7 @@ const NewMessage = ({ token, currentUser }) => {
         value={newPostContent}
         onChange={(e) => setNewPostContent(e.target.value)}
       ></textarea>
-      <button onClick={handleCreatePost}>Create Post</button>
+      <button onClick={handleCreatePost}>Send</button>
       {loading ? (
         <p>Loading posts...</p>
       ) : (

@@ -4,6 +4,7 @@ const MessageList = ({ posts, onDelete, currentUser, token }) => {
   const handleDelete = useCallback(
     async (msgId) => {
       try {
+        console.log(`Attempting to delete message with id: ${msgId}`);
         const response = await fetch(
           `https://chatify-api.up.railway.app/messages/${msgId}`,
           {
@@ -14,7 +15,9 @@ const MessageList = ({ posts, onDelete, currentUser, token }) => {
             },
           }
         );
+
         if (response.ok) {
+          console.log(`Message with id: ${msgId} deleted successfully`);
           onDelete(msgId);
         } else {
           console.error("Failed to delete post, status code:", response.status);
@@ -35,18 +38,19 @@ const MessageList = ({ posts, onDelete, currentUser, token }) => {
         {posts.map((post) => (
           <li key={post.id} className="message-border">
             <p>
-              <span className="username">{post.userId}</span> skrev:
+              <span className="username">{currentUser}</span> skrev:
             </p>
 
             <div className="chat-bg">
               <p>{post.text}</p>
+              <p>{post.createdAt}</p>
             </div>
 
             {currentUser === post.userId && (
               <button onClick={() => handleDelete(post.id)}>Delete</button>
             )}
           </li>
-        ))}
+        ))}{" "}
       </ul>
     </div>
   );

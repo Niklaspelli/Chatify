@@ -9,29 +9,45 @@ const Chat = () => {
   const { username } = location.state || {};
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loggedInUsername, setLoggedInUsername] = useState(username || "");
+  const [currentUser, setCurrentUser] = useState(username || "");
   const [token, setToken] = useState(localStorage.getItem("token"));
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("loggedInUsername");
-    const isAuthenticated = location.state?.isAuthenticated;
+    const storedToken = localStorage.getItem("token");
 
-    if (!token || !storedUsername) {
-      navigate("/login");
+    if (!storedToken || !storedUsername) {
+      navigate("/Register");
       return;
     }
 
-    setIsAuthenticated(fakeAuth.isAuthenticated);
-    setLoggedInUsername(storedUsername || "");
-    setToken(localStorage.getItem("token"));
-  }, [navigate, location.state, token]);
+    if (username) {
+      setCurrentUser(username);
+    } else {
+      setCurrentUser(storedUsername);
+    }
+
+    setToken(storedToken);
+
+    if (fakeAuth.isAuthenticated) {
+      setIsAuthenticated(true);
+    } else {
+      navigate("/login");
+    }
+  }, [navigate, username]);
 
   return (
     <>
-      <h2>Welcome to the Chat!</h2>
-      {loggedInUsername && <p>Welcome, {loggedInUsername}!</p>}
-      <NewMessage token={token} currentUser={loggedInUsername} />{" "}
-      {/* Pass currentUser here */}
+      <h2>
+        {currentUser && (
+          <p>
+            Du är inloggad som:
+            <span className="username"> {currentUser}</span>
+          </p>
+        )}
+      </h2>
+      <NewMessage token={token} currentUser={currentUser} />{" "}
+      {/* Pass token and currentUser as props */}
     </>
   );
 };
