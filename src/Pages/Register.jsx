@@ -13,6 +13,9 @@ const PWD_REGEX =
   /^(?=.*[a-zåäö])(?=.*[A-ÖÅÄÖ])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+const csrf = import.meta.env.VITE_API_CSRF;
+const register = import.meta.env.VITE_REGISTER;
+
 function Register() {
   const userRef = useRef();
   const errRef = useRef();
@@ -65,7 +68,7 @@ function Register() {
 
   const fetchCsrfToken = async () => {
     try {
-      const response = await fetch("https://chatify-api.up.railway.app/csrf", {
+      const response = await fetch(csrf, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -94,23 +97,20 @@ function Register() {
     }
 
     try {
-      const response = await fetch(
-        "https://chatify-api.up.railway.app/auth/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "CSRF-Token": csrfToken,
-          },
-          body: JSON.stringify({
-            username: user,
-            password: pwd,
-            email: email,
-            avatar: "",
-            csrfToken: csrfToken,
-          }),
-        }
-      );
+      const response = await fetch(register, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "CSRF-Token": csrfToken,
+        },
+        body: JSON.stringify({
+          username: user,
+          password: pwd,
+          email: email,
+          avatar: "",
+          csrfToken: csrfToken,
+        }),
+      });
 
       if (!response.ok) {
         throw new Error("Network response was not ok");

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import fakeAuth from "../Auth/fakeAuth";
+
+const csrf = import.meta.env.VITE_API_CSRF;
+const authToken = import.meta.env.VITE_AUTH_TOKEN;
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -9,7 +12,6 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [csrfToken, setCsrfToken] = useState("");
   const navigate = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
     fetchCsrfToken();
@@ -17,7 +19,7 @@ const Login = () => {
 
   const fetchCsrfToken = async () => {
     try {
-      const response = await fetch("https://chatify-api.up.railway.app/csrf", {
+      const response = await fetch(csrf, {
         method: "PATCH",
       });
       if (!response.ok) {
@@ -35,21 +37,18 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(
-        "https://chatify-api.up.railway.app/auth/token",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "CSRF-Token": csrfToken,
-          },
-          body: JSON.stringify({
-            username: username,
-            password: password,
-            csrfToken: csrfToken,
-          }),
-        }
-      );
+      const response = await fetch(authToken, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "CSRF-Token": csrfToken,
+        },
+        body: JSON.stringify({
+          username,
+          password,
+          csrfToken,
+        }),
+      });
 
       if (!response.ok) {
         const data = await response.json();
