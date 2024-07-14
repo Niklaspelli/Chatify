@@ -33,6 +33,11 @@ const Login = () => {
   };
 
   const login = async () => {
+    if (!username || !password) {
+      setCorrectCredentials(false);
+      return;
+    }
+
     setCorrectCredentials(null);
     setIsLoading(true);
 
@@ -50,20 +55,21 @@ const Login = () => {
         }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const data = await response.json();
         throw new Error(data.error || "Login failed");
       }
 
-      const data = await response.json();
       const token = data.token;
       const loggedInUsername = data.username;
       localStorage.setItem("token", token);
       localStorage.setItem("loggedInUsername", loggedInUsername);
       fakeAuth.signIn(() => {
         setCorrectCredentials(true);
-        navigate("/chat", { state: { username: loggedInUsername } });
       });
+
+      navigate("/chat", { state: { username: loggedInUsername } });
     } catch (error) {
       setCorrectCredentials(false);
       console.error("Login failed:", error.message);
@@ -75,22 +81,28 @@ const Login = () => {
   return (
     <div>
       <h2>Sign in!</h2>
-      <label>Username:</label>
+      <label htmlFor="username">Username:</label>
       <input
         type="text"
+        id="username"
         placeholder="username"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
+        aria-label="Username"
+        aria-required="true"
       />
-      <label>Password:</label>
+      <label htmlFor="password">Password:</label>
       <input
         type="password"
+        id="password"
         placeholder="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
+        aria-label="Password"
+        aria-required="true"
       />
-      <button onClick={login} disabled={isLoading}>
-        Sign in
+      <button onClick={login} disabled={isLoading} aria-busy={isLoading}>
+        {isLoading ? "Signing in..." : "Sign in"}
       </button>
       {correctCredentials === false && (
         <div role="alert" className="ml-1 mt-4 w-52 alert alert-error">
@@ -99,7 +111,6 @@ const Login = () => {
           </span>
         </div>
       )}
-      {isLoading && <div>Loading...</div>}
       <Link to="/register">Register</Link>
     </div>
   );

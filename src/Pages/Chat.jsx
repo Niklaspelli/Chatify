@@ -1,40 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import fakeAuth from "../Auth/fakeAuth";
+import fakeAuth from "../Auth/fakeAuth"; // Adjust the path based on your project structure
 import NewMessage from "./Message/NewMessage";
 
 const Chat = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { state } = location;
   const { username } = location.state || {};
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState(username || "");
-  const [token, setToken] = useState(localStorage.getItem("token"));
 
   useEffect(() => {
     const storedUsername = localStorage.getItem("loggedInUsername");
-    const storedToken = localStorage.getItem("token");
+    const authenticated = fakeAuth.isAuthenticated;
 
-    if (!storedToken || !storedUsername) {
-      navigate("/Register");
+    if (!storedUsername || !authenticated) {
+      navigate("/login"); // Redirect to login page if not authenticated
       return;
     }
 
-    if (username) {
-      setCurrentUser(username);
-    } else {
-      setCurrentUser(storedUsername);
-    }
-
-    setToken(storedToken);
-
-    if (fakeAuth.isAuthenticated) {
-      setIsAuthenticated(true);
-    } else {
-      navigate("/login");
-    }
-  }, [navigate, username]);
+    setIsAuthenticated(authenticated);
+    setCurrentUser(storedUsername);
+  }, [navigate]);
 
   return (
     <>
@@ -42,12 +31,16 @@ const Chat = () => {
         {currentUser && (
           <p>
             Du är inloggad som:
-            <span className="username"> {currentUser}</span>
+            <div className="username">{currentUser}</div>
           </p>
         )}
       </h2>
-      <NewMessage token={token} currentUser={currentUser} />{" "}
-      {/* Pass token and currentUser as props */}
+      {isAuthenticated && (
+        <NewMessage
+          token={localStorage.getItem("token")}
+          currentUser={currentUser}
+        />
+      )}
     </>
   );
 };
