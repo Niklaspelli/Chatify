@@ -212,7 +212,6 @@ const NewMessage = ({ token, username }) => {
         },
         body: JSON.stringify({
           text: newPostContent,
-          userId: username,
         }),
       });
 
