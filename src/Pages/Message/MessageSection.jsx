@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MessageList from "./MessageList";
 
-const MessageSection = ({ token, currentUser }) => {
+const MessageSection = ({ token, username }) => {
   const [posts, setPosts] = useState([]);
   const [usersMap, setUsersMap] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -23,7 +23,7 @@ const MessageSection = ({ token, currentUser }) => {
         }
       );
       if (!response.ok) {
-        throw new Error("Failed to fetch posts");
+        throw new Error(`Failed to fetch posts: ${response.statusText}`);
       }
       const data = await response.json();
       setPosts(data);
@@ -76,10 +76,12 @@ const MessageSection = ({ token, currentUser }) => {
       );
 
       if (!response.ok) {
-        throw new Error("Failed to delete post");
+        throw new Error(`Failed to delete post: ${response.statusText}`);
       }
 
-      setPosts(posts.filter((post) => post.id !== msgID));
+      // Remove the post from the local state
+      setPosts((prevPosts) => prevPosts.filter((post) => post.id !== msgID));
+      console.log(`Post with ID ${msgID} deleted successfully`);
     } catch (error) {
       setError(error.message);
       console.error("Error deleting post:", error.message);
@@ -96,9 +98,8 @@ const MessageSection = ({ token, currentUser }) => {
       ) : (
         <MessageList
           posts={posts}
-          usersMap={usersMap}
           onDelete={handleDelete}
-          currentUser={currentUser}
+          username={username}
         />
       )}
     </div>

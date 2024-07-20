@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+/* import React, { useState, useEffect } from "react";
 import MessageList from "./MessageList";
 
-const NewMessage = ({ token }) => {
+const NewMessage = ({ token, username }) => {
   const [newPostContent, setNewPostContent] = useState("");
   const [posts, setPosts] = useState([]);
   const [users, setUsers] = useState([]);
@@ -78,7 +78,7 @@ const NewMessage = ({ token }) => {
 
     const payload = {
       text: newPostContent,
-      user: currentUser.username, // Assuming currentUser has a username property
+      user: username, // Assuming currentUser has a username property
     };
 
     setSending(true);
@@ -149,10 +149,141 @@ const NewMessage = ({ token }) => {
       {loading ? (
         <p>Loading posts...</p>
       ) : (
-        <MessageList posts={posts} onDelete={handleDelete} />
+        <MessageList
+          posts={posts}
+          onDelete={handleDelete}
+          username={username}
+        />
       )}
     </div>
   );
+};
+
+export default NewMessage;
+ */
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import MessageList from "./MessageList";
+
+const BackendURL = "https://chatify-api.up.railway.app";
+
+const NewMessage = ({ token, username }) => {
+  const [newPostContent, setNewPostContent] = useState("");
+  const [posts, setPosts] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const fetchPosts = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`${BackendURL}/messages`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Ensure the token is included
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`Failed to fetch posts: ${response.statusText}`);
+      }
+      const data = await response.json();
+      setPosts(data);
+    } catch (error) {
+      console.error("Failed to fetch posts:", error.message);
+      setError("Failed to fetch posts. Please check your token and try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (token) {
+      fetchPosts();
+    }
+  }, [token]); // Fetch posts when token changes
+
+  const handleCreatePost = async () => {
+    setError(null);
+    try {
+      const response = await fetch(`${BackendURL}/messages`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Ensure the token is included
+        },
+        body: JSON.stringify({
+          text: newPostContent,
+          userId: username,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          `Failed to create post: ${errorData.message || response.statusText}`
+        );
+      }
+
+      const createdPost = await response.json();
+      console.log("Post created successfully:", createdPost);
+      setNewPostContent("");
+      setPosts([createdPost, ...posts]);
+    } catch (error) {
+      console.error("Failed to create post:", error.message);
+      setError(`Failed to create post: ${error.message}`);
+    }
+  };
+
+  const handleDelete = async (msgID) => {
+    try {
+      const response = await fetch(
+        `https://chatify-api.up.railway.app/messages/${msgID}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to delete post");
+      }
+
+      setPosts(posts.filter((post) => post.id !== msgID));
+    } catch (error) {
+      setError(error.message);
+      console.error("Error deleting post:", error.message);
+    }
+  };
+
+  return (
+    <div>
+      <h2>Create a New Post</h2>
+      <textarea
+        placeholder="Message:"
+        value={newPostContent}
+        onChange={(e) => setNewPostContent(e.target.value)}
+      ></textarea>
+      <button onClick={handleCreatePost} disabled={!newPostContent}>
+        Create Post
+      </button>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      {loading ? (
+        <p>Loading posts...</p>
+      ) : (
+        <MessageList
+          posts={posts}
+          onDelete={handleDelete}
+          username={username}
+        />
+      )}
+    </div>
+  );
+};
+
+NewMessage.propTypes = {
+  token: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
 };
 
 export default NewMessage;

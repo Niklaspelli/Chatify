@@ -62,9 +62,16 @@ const Login = () => {
       }
 
       const token = data.token;
-      const loggedInUsername = data.username;
+
+      // Store the token in local storage
       localStorage.setItem("token", token);
+
+      // Optionally, store other user info (e.g., username)
+      const decodedToken = JSON.parse(atob(token.split(".")[1]));
+      const loggedInUsername = decodedToken.user;
       localStorage.setItem("loggedInUsername", loggedInUsername);
+
+      // Simulate authentication using fakeAuth
       fakeAuth.signIn(() => {
         setCorrectCredentials(true);
       });
