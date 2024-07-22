@@ -167,11 +167,21 @@ import MessageList from "./MessageList";
 
 const BackendURL = "https://chatify-api.up.railway.app";
 
-const NewMessage = ({ token, username }) => {
+const generateUUID = () => {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) =>
+    (c === "x"
+      ? Math.floor(Math.random() * 16)
+      : Math.floor(Math.random() * 4) + 8
+    ).toString(16)
+  );
+};
+
+const NewMessage = ({ token, username, userId }) => {
   const [newPostContent, setNewPostContent] = useState("");
   const [posts, setPosts] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [conversationId, setConversationId] = useState(generateUUID());
 
   const fetchPosts = async () => {
     setLoading(true);
@@ -199,20 +209,24 @@ const NewMessage = ({ token, username }) => {
     if (token) {
       fetchPosts();
     }
-  }, [token]); // Fetch posts when token changes
+  }, [token, conversationId, userId]);
 
   const handleCreatePost = async () => {
     setError(null);
     try {
+      const body = JSON.stringify({
+        text: newPostContent,
+        conversationId,
+        userId, // Include userId in the request body
+      });
+
       const response = await fetch(`${BackendURL}/messages`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Ensure the token is included
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          text: newPostContent,
-        }),
+        body,
       });
 
       if (!response.ok) {
@@ -221,6 +235,8 @@ const NewMessage = ({ token, username }) => {
           `Failed to create post: ${errorData.message || response.statusText}`
         );
       }
+
+      console.log("Request Body:", body);
 
       const createdPost = await response.json();
       console.log("Post created successfully:", createdPost);
@@ -234,15 +250,12 @@ const NewMessage = ({ token, username }) => {
 
   const handleDelete = async (msgID) => {
     try {
-      const response = await fetch(
-        `https://chatify-api.up.railway.app/messages/${msgID}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${BackendURL}/messages/${msgID}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (!response.ok) {
         throw new Error("Failed to delete post");
@@ -283,6 +296,7 @@ const NewMessage = ({ token, username }) => {
 NewMessage.propTypes = {
   token: PropTypes.string.isRequired,
   username: PropTypes.string.isRequired,
+  userId: PropTypes.string.isRequired, // Add userId to propTypes validation
 };
 
 export default NewMessage;

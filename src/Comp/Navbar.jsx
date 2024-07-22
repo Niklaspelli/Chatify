@@ -12,7 +12,7 @@ const Navbar = () => {
 
   const logout = () => {
     fakeAuth.signOut(() => {
-      navigate("/");
+      navigate("/login");
     });
   };
 
@@ -26,9 +26,7 @@ const Navbar = () => {
             <span onClick={logout}>Logout</span>
           )}
         </li>
-        <li>
-          <Link to="/chat">Chat {isAuthenticated ? "" : "🔒"}</Link>
-        </li>
+        <li></li>
       </ul>
     </nav>
   );
