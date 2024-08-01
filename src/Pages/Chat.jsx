@@ -3,6 +3,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import fakeAuth from "../Auth/fakeAuth"; // Adjust path as needed
 import NewMessage from "./Message/NewMessage";
 
+import AllMessages from "./Message/AllMessages";
+import Conversation from "./Message/Conversation";
+
 const Chat = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -31,12 +34,14 @@ const Chat = () => {
     return <p>Loading...</p>; // Display a loading state while checking authentication
   }
 
+  const userId = 331;
+
   return (
     <div>
       <h2>
         {username && (
           <p>
-            You are logged in as:
+            Du är inloggad som:
             <span className="username">{username}</span>
           </p>
         )}
