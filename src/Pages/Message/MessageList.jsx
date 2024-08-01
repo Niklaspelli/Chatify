@@ -50,6 +50,7 @@ const MessageList = ({ posts, onDelete, currentUserId }) => {
           <p className="message-text">{post.text}</p>
           <p>Skrev: {new Date(post.createdAt).toLocaleString()}</p>
           <p>Conversation ID: {post.conversationId}</p>
+          <p>Message ID: {post.id}</p>
           <button onClick={() => onDelete(post.id)}>Delete</button>
         </div>
       ))}

@@ -574,6 +574,7 @@ import PropTypes from "prop-types";
 import MessageList from "./MessageList";
 import ChatPopup from "./ChatPopup";
 import UserList from "./UserList";
+import SearchBar from "../../Comp/Searchbar/Searchbar";
 
 const BackendURL = "https://chatify-api.up.railway.app";
 
@@ -592,6 +593,8 @@ const NewMessage = ({ token, userId }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]); // Initialize with an empty array
+  const [searchQuery, setSearchQuery] = useState("");
   const [activeConversationId, setActiveConversationId] = useState(null);
   const [showChatPopup, setShowChatPopup] = useState(false);
 
@@ -635,6 +638,7 @@ const NewMessage = ({ token, userId }) => {
       }
       const data = await response.json();
       setUsers(data);
+      setFilteredUsers([]); // Ensure filteredUsers is empty initially
     } catch (error) {
       setError(`Failed to fetch users: ${error.message}`);
     }
@@ -719,9 +723,24 @@ const NewMessage = ({ token, userId }) => {
     setShowChatPopup(true);
   };
 
+  // Function to handle search input and filter users
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    if (query) {
+      const lowercasedQuery = query.toLowerCase();
+      const filtered = users.filter((user) =>
+        user.username.toLowerCase().includes(lowercasedQuery)
+      );
+      setFilteredUsers(filtered); // Update filtered users
+    } else {
+      setFilteredUsers([]); // Ensure no users are shown when query is empty
+    }
+  };
+
   return (
     <div>
-      <UserList users={users} onUserClick={handleUserClick} />
+      <SearchBar onSearch={handleSearch} />
+      <UserList users={filteredUsers} onUserClick={handleUserClick} />
       {showChatPopup && activeConversationId && (
         <ChatPopup
           posts={posts}
@@ -740,7 +759,6 @@ const NewMessage = ({ token, userId }) => {
 
 NewMessage.propTypes = {
   token: PropTypes.string.isRequired,
-  username: PropTypes.string.isRequired,
   userId: PropTypes.string.isRequired,
 };
 

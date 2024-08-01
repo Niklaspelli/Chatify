@@ -1,28 +1,25 @@
+// UserList.jsx
 import React from "react";
 import PropTypes from "prop-types";
 
 const UserList = ({ users, onUserClick }) => {
+  if (users.length === 0) {
+    return <div>No users found</div>; // Optionally show a message if no users are found
+  }
+
   return (
-    <div>
-      <h3>Användare:</h3>
-      <ul>
-        {users.map((user) => (
-          <li key={user.id} onClick={() => onUserClick(user.id)}>
-            {user.username}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <ul>
+      {users.map((user) => (
+        <li key={user.id} onClick={() => onUserClick(user.id)}>
+          {user.username}
+        </li>
+      ))}
+    </ul>
   );
 };
 
 UserList.propTypes = {
-  users: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      username: PropTypes.string.isRequired,
-    })
-  ).isRequired,
+  users: PropTypes.array.isRequired,
   onUserClick: PropTypes.func.isRequired,
 };
 
