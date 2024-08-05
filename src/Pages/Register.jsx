@@ -205,7 +205,7 @@ function Register() {
                   style={{ width: "400px", display: "justify-content-center" }}
                 >
                   <Form.Control
-                    type="email"
+                    type="text"
                     id="email"
                     autoComplete="off"
                     onChange={(e) => setEmail(e.target.value)}

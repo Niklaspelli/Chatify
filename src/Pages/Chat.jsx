@@ -1,40 +1,38 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import fakeAuth from "../Auth/fakeAuth"; // Adjust path as needed
 import NewMessage from "./Message/NewMessage";
-
-import AllMessages from "./Message/AllMessages";
-import Conversation from "./Message/Conversation";
 
 const Chat = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { state } = location;
-  const username = state?.username; // Optional chaining for safe access
+  const [username, setUsername] = useState(
+    state?.username || localStorage.getItem("loggedInUsername")
+  );
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const storedToken = localStorage.getItem("token");
     const storedUsername = localStorage.getItem("loggedInUsername");
-    const authenticated = fakeAuth.isAuthenticated;
 
-    if (!storedUsername || !authenticated) {
-      navigate("/login");
+    if (storedToken && storedUsername && fakeAuth.isAuthenticated) {
+      setIsAuthenticated(true);
+      setToken(storedToken);
+      setUsername(storedUsername);
     } else {
-      setIsAuthenticated(authenticated);
-      setToken(localStorage.getItem("token"));
+      navigate("/login");
     }
 
     setLoading(false); // Ensure loading state is cleared
-  }, [navigate]); // Only depend on navigate
+  }, [navigate]);
 
   if (loading) {
     return <p>Loading...</p>; // Display a loading state while checking authentication
   }
-
-  const userId = 331;
 
   return (
     <div>

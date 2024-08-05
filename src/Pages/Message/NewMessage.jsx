@@ -682,6 +682,7 @@ const NewMessage = ({ token, userId }) => {
       const createdPost = await response.json();
       setNewPostContent("");
       setPosts((prevPosts) => [createdPost, ...prevPosts]);
+      await fetchPosts(activeConversationId); // Fetch posts again after creating a new post
     } catch (error) {
       console.error("Failed to create post:", error.message);
       setError(`Failed to create post: ${error.message}`);

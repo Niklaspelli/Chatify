@@ -29,7 +29,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const MessageList = ({ posts, onDelete, currentUserId }) => {
-  if (!posts) {
+  if (!posts || posts.length === 0) {
     return <p>No messages yet.</p>;
   }
 
@@ -44,9 +44,10 @@ const MessageList = ({ posts, onDelete, currentUserId }) => {
               post.senderId === currentUserId ? "flex-end" : "flex-start",
             backgroundColor:
               post.senderId === currentUserId ? "#000000" : "#fff3e0",
+            color: post.senderId === currentUserId ? "#ffffff" : "#000000",
           }}
         >
-          <div className="username">{post.userId}:</div>
+          <p className="username">{post.username}:</p>
           <p className="message-text">{post.text}</p>
           <p>Skrev: {new Date(post.createdAt).toLocaleString()}</p>
           <p>Conversation ID: {post.conversationId}</p>
@@ -72,12 +73,7 @@ const messageStyle = {
   margin: "5px",
   padding: "10px",
   borderRadius: "5px",
-};
-
-MessageList.propTypes = {
-  posts: PropTypes.array.isRequired,
-  onDelete: PropTypes.func.isRequired,
-  currentUserId: PropTypes.string.isRequired,
+  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
 };
 
 export default MessageList;
