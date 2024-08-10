@@ -17,7 +17,7 @@ function App() {
           <Route path="/Register" element={<Register />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/chat" element={<Chat />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/Profile" element={<Profile />} />
             {/* handle other routes */}
           </Route>
         </Routes>

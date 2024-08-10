@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
-import fakeAuth from "../Auth/fakeAuth"; // Adjust path as needed
+import { useLocation, useNavigate } from "react-router-dom";
+import fakeAuth from "../Auth/fakeAuth";
 import NewMessage from "./Message/NewMessage";
 
 const Chat = () => {
@@ -34,6 +34,10 @@ const Chat = () => {
     return <p>Loading...</p>; // Display a loading state while checking authentication
   }
 
+  const handleNavigateToProfile = () => {
+    navigate("/profile", { state: { token, username } });
+  };
+
   return (
     <div>
       <h2>
@@ -45,6 +49,7 @@ const Chat = () => {
         )}
       </h2>
       {isAuthenticated && <NewMessage token={token} username={username} />}
+      <button onClick={handleNavigateToProfile}>Go to Profile</button>
     </div>
   );
 };

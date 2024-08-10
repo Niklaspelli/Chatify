@@ -47,7 +47,7 @@ const MessageList = ({ posts, onDelete, currentUserId }) => {
             color: post.senderId === currentUserId ? "#ffffff" : "#000000",
           }}
         >
-          <p className="username">{post.username}:</p>
+          <p className="username">{post.userId}:</p>
           <p className="message-text">{post.text}</p>
           <p>Skrev: {new Date(post.createdAt).toLocaleString()}</p>
           <p>Conversation ID: {post.conversationId}</p>
