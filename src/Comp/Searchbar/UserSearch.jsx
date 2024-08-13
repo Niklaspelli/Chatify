@@ -5,11 +5,13 @@ import UserList from "./UserList";
 const BackendURL = "https://chatify-api.up.railway.app";
 
 const UserSearch = ({ token }) => {
-  const [users, setUsers] = useState([]);
-  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [users, setUsers] = useState([]); // All users fetched from API
+  const [filteredUsers, setFilteredUsers] = useState([]); // Users that match the search
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [hasSearched, setHasSearched] = useState(false); // Track if a search has been performed
 
+  // Fetch users from the backend
   const fetchUsers = async () => {
     try {
       const response = await fetch(`${BackendURL}/users`, {
@@ -23,8 +25,7 @@ const UserSearch = ({ token }) => {
       }
 
       const data = await response.json();
-      setUsers(data);
-      setFilteredUsers(data);
+      setUsers(data); // Store all users
     } catch (error) {
       setError(`Failed to fetch users: ${error.message}`);
     } finally {
@@ -41,7 +42,9 @@ const UserSearch = ({ token }) => {
     }
   }, [token]);
 
+  // Handle search query and filter users
   const handleSearch = (query) => {
+    setHasSearched(true); // Mark that a search has been performed
     if (query) {
       const lowercasedQuery = query.toLowerCase();
       const filtered = users.filter((user) =>
@@ -49,7 +52,7 @@ const UserSearch = ({ token }) => {
       );
       setFilteredUsers(filtered);
     } else {
-      setFilteredUsers(users); // Show all users if query is empty
+      setFilteredUsers([]); // Show no users if query is empty
     }
   };
 
@@ -64,7 +67,16 @@ const UserSearch = ({ token }) => {
   return (
     <div>
       <SearchBar onSearch={handleSearch} />
-      <UserList users={filteredUsers} token={token} /> {/* Pass token here */}
+      {/* Render UserList only if a search has been performed */}
+      {hasSearched && (
+        <>
+          {filteredUsers.length === 0 ? (
+            <div>No users found</div> // Display message if no users match the search
+          ) : (
+            <UserList users={filteredUsers} token={token} />
+          )}
+        </>
+      )}
     </div>
   );
 };

@@ -3,8 +3,9 @@ import PropTypes from "prop-types";
 import Invite from "../../Pages/Message/Invite";
 
 const UserList = ({ users, token }) => {
+  // Render nothing if the users list is empty
   if (users.length === 0) {
-    return <p>No users found</p>;
+    return null;
   }
 
   return (
@@ -12,7 +13,8 @@ const UserList = ({ users, token }) => {
       {users.map((user) => (
         <div key={user.id} style={userStyle}>
           <span>{user.username}</span>
-          <Invite id={user.userId} token={token} />
+          <Invite id={user.userId} token={token} />{" "}
+          {/* Ensure 'id' is correct */}
         </div>
       ))}
     </div>
@@ -30,7 +32,7 @@ const userStyle = {
 UserList.propTypes = {
   users: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired, // Ensure 'id' is correct
       username: PropTypes.string.isRequired,
     })
   ).isRequired,
