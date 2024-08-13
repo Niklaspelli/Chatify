@@ -4,17 +4,21 @@ import fakeAuth from "../Auth/fakeAuth";
 import "../index.css";
 
 const Navbar = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    fakeAuth.isAuthenticated
+  );
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidenav = () => {
     setIsOpen(!isOpen);
   };
+
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Update authentication status
     setIsAuthenticated(fakeAuth.isAuthenticated);
-  });
+  }, [fakeAuth.isAuthenticated]); // Dependency on auth status
 
   const logout = () => {
     fakeAuth.signOut(() => {
@@ -29,19 +33,25 @@ const Navbar = () => {
       </button>
       <nav className="nav">
         <ul>
-          <li>
-            <Link to={"/Profile"}>Profile</Link>
-          </li>
-          <li>
-            <Link to={"/Chat"}>Chat</Link>
-          </li>
-          <li>
-            {!fakeAuth.isAuthenticated ? (
+          {!isAuthenticated ? (
+            <li>
               <Link to={"/login"}>Sign In/ Sign Up</Link>
-            ) : (
-              <span onClick={logout}>Logout</span>
-            )}
-          </li>
+            </li>
+          ) : (
+            <>
+              <li>
+                <Link to={"/profile"}>Profile</Link>
+              </li>
+              <li>
+                <Link to={"/chat"}>Chat</Link>
+              </li>
+              <li>
+                <span onClick={logout} style={{ cursor: "pointer" }}>
+                  Logout
+                </span>
+              </li>
+            </>
+          )}
         </ul>
       </nav>
     </div>

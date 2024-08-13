@@ -232,3 +232,45 @@ input[type=text],
 .sidenav .nav a:hover {
   color: #f1f1f1;
 }
+
+
+/* Add this CSS to your stylesheet */
+.confirmation-prompt {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #f9f9f9;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.confirmation-prompt p {
+  color: black;
+  margin-bottom: 20px;
+}
+
+.confirmation-prompt .btn {
+  margin: 0 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+}

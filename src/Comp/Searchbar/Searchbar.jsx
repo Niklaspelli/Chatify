@@ -15,31 +15,40 @@ const SearchBar = ({ onSearch }) => {
   };
 
   return (
-    <div style={searchBarStyle}>
+    <div style={searchBarContainerStyle}>
       <input
         type="text"
         placeholder="Search users..."
         value={query}
         onChange={handleChange}
         style={inputStyle}
+        aria-label="Search users"
       />
     </div>
   );
 };
 
-const searchBarStyle = {
-  marginBottom: "10px",
+// Styles
+const searchBarContainerStyle = {
+  marginBottom: "15px",
+  display: "flex",
+  justifyContent: "center",
 };
 
 const inputStyle = {
   width: "100%",
-  padding: "8px",
-  borderRadius: "4px",
-  border: "1px solid #ccc",
+  maxWidth: "400px",
+  padding: "10px",
+  borderRadius: "20px",
+  border: "1px solid #ddd",
+  boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+  outline: "none",
+  fontSize: "16px",
+  transition: "border-color 0.3s ease",
 };
 
 SearchBar.propTypes = {
-  onSearch: PropTypes.func.isRequired, // Ensure onSearch is a function
+  onSearch: PropTypes.func.isRequired, // Validate that onSearch is a function
 };
 
 export default SearchBar;

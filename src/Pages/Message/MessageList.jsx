@@ -24,11 +24,10 @@ const MessageList = ({ posts, onDelete, username }) => {
 };
 
 export default MessageList; */
-
 import React from "react";
 import PropTypes from "prop-types";
 
-const MessageList = ({ posts, onDelete, currentUserId }) => {
+const MessageList = ({ posts, onDelete, username, currentUserId }) => {
   if (!posts || posts.length === 0) {
     return <p>No messages yet.</p>;
   }
@@ -47,12 +46,17 @@ const MessageList = ({ posts, onDelete, currentUserId }) => {
             color: post.senderId === currentUserId ? "#ffffff" : "#000000",
           }}
         >
+          <p className="username">
+            {sessionStorage.getItem("clicked_username")}:
+          </p>
           <p className="username">{post.userId}:</p>
           <p className="message-text">{post.text}</p>
-          <p>Skrev: {new Date(post.createdAt).toLocaleString()}</p>
+          <p>Sent: {new Date(post.createdAt).toLocaleString()}</p>
           <p>Conversation ID: {post.conversationId}</p>
           <p>Message ID: {post.id}</p>
-          <button onClick={() => onDelete(post.id)}>Delete</button>
+          {post.senderId === currentUserId && (
+            <button onClick={() => onDelete(post.id)}>Delete</button>
+          )}
         </div>
       ))}
     </div>
@@ -64,6 +68,7 @@ const messageListStyle = {
   flexDirection: "column",
   height: "100%",
   overflowY: "auto",
+  padding: "10px",
 };
 
 const messageStyle = {
@@ -74,6 +79,22 @@ const messageStyle = {
   padding: "10px",
   borderRadius: "5px",
   boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+  wordBreak: "break-word",
+};
+
+MessageList.propTypes = {
+  posts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      username: PropTypes.string.isRequired, // Updated from username to user
+      text: PropTypes.string.isRequired,
+      createdAt: PropTypes.string.isRequired,
+      conversationId: PropTypes.string.isRequired,
+      senderId: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  onDelete: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired, // Assuming you want to use this elsewhere
 };
 
 export default MessageList;

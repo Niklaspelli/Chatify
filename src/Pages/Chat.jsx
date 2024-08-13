@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+/* import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import fakeAuth from "../Auth/fakeAuth";
 import NewMessage from "./Message/NewMessage";
@@ -6,23 +6,26 @@ import NewMessage from "./Message/NewMessage";
 const Chat = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { state } = location;
-  const [username, setUsername] = useState(
-    state?.username || localStorage.getItem("loggedInUsername")
-  );
 
+  // Initialize state with data from location or localStorage
+  const [username, setUsername] = useState(
+    location.state?.username || localStorage.getItem("loggedInUsername")
+  );
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("token"));
+  const [userId, setUserId] = useState(localStorage.getItem("userId")); // Add state for userId
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     const storedUsername = localStorage.getItem("loggedInUsername");
+    const storedUserId = localStorage.getItem("userId");
 
     if (storedToken && storedUsername && fakeAuth.isAuthenticated) {
       setIsAuthenticated(true);
       setToken(storedToken);
       setUsername(storedUsername);
+      setUserId(storedUserId); // Set userId from localStorage
     } else {
       navigate("/login");
     }
@@ -35,7 +38,7 @@ const Chat = () => {
   }
 
   const handleNavigateToProfile = () => {
-    navigate("/profile", { state: { token, username } });
+    navigate("/profile", { state: { token, userId } });
   };
 
   return (
@@ -48,36 +51,130 @@ const Chat = () => {
           </p>
         )}
       </h2>
-      {isAuthenticated && <NewMessage token={token} username={username} />}
+      {isAuthenticated && <NewMessage token={token} userId={userId} />}
       <button onClick={handleNavigateToProfile}>Go to Profile</button>
     </div>
   );
 };
 
 export default Chat;
+ */
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import fakeAuth from "../Auth/fakeAuth";
+import SearchBar from "../Comp/Searchbar/SearchBar";
+import UserList from "../Comp/Searchbar/UserList";
+import NewMessage from "./Message/NewMessage";
+import Invite from "./Message/Invite";
 
-/* import React, { useEffect, useState } from "react";
-import MessageSection from "./Message/MessageSection";
+const BackendURL = "https://chatify-api.up.railway.app";
 
 const Chat = () => {
-  const [token, setToken] = useState(null);
-  const [currentUser, setCurrentUser] = useState(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const stateUsername = location.state?.username || "";
+  const stateId = location.state?.id || "";
+
+  const [username, setUsername] = useState(
+    stateUsername || localStorage.getItem("loggedInUsername") || ""
+  );
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [id, setId] = useState(stateId || localStorage.getItem("Id") || "");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [users, setUsers] = useState([]); // Maintain the full list of users
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    const storedUserId = localStorage.getItem("loggedInUserId");
-    if (storedToken && storedUserId) {
-      setToken(storedToken);
-      setCurrentUser(Number(storedUserId)); // Ensure the userId is a number
-    }
-  }, []);
+    const verifyAuthentication = async () => {
+      if (token && id && fakeAuth.isAuthenticated) {
+        setIsAuthenticated(true);
+      } else {
+        navigate("/login");
+      }
+      setLoading(false);
+    };
 
-  if (!token || !currentUser) {
-    return <p>Loading...</p>; // Or redirect to login
+    verifyAuthentication();
+  }, [token, id, navigate]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch(`${BackendURL}/users`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`Failed to fetch users: ${response.statusText}`);
+        }
+        const data = await response.json();
+        setUsers(data);
+        setFilteredUsers(data); // Initialize filtered users with all users
+      } catch (error) {
+        setError(`Failed to fetch users: ${error.message}`);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (token) {
+      fetchUsers();
+    } else {
+      setError("No authentication token provided");
+      setLoading(false);
+    }
+  }, [token]);
+
+  const handleSearch = (query) => {
+    if (query) {
+      const lowercasedQuery = query.toLowerCase();
+      const filtered = users.filter((user) =>
+        user.username.toLowerCase().includes(lowercasedQuery)
+      );
+      setFilteredUsers(filtered.length ? filtered : []); // Show empty array if no matches
+    } else {
+      setFilteredUsers(users); // Reset to show all users if query is empty
+    }
+  };
+
+  if (loading) {
+    return <p>Loading...</p>;
   }
 
-  return <MessageSection token={token} currentUser={currentUser} />;
+  return (
+    <div>
+      {username && (
+        <h2>
+          <p>
+            You are logged in as:
+            <span className="username">{username}</span>
+          </p>
+        </h2>
+      )}
+      <SearchBar onSearch={handleSearch} />
+      {filteredUsers.length === 0 ? (
+        <p>No users found</p> // Display a message when there are no users
+      ) : (
+        <UserList users={filteredUsers} token={token} id={id} /> // Pass filtered users
+      )}
+      {isAuthenticated && <NewMessage token={token} id={id} />}
+      {error && (
+        <div role="alert" className="ml-1 mt-4 w-52 alert alert-error">
+          <span className="text-xs text-center">{error}</span>
+        </div>
+      )}
+
+      {/* Example usage of Invite component */}
+      {users.map((user) => {
+        /*  console.log("User ID:", user.userId); // Log the ID being passed */
+        return <Invite key={user.userId} id={user.userId} token={token} />;
+      })}
+    </div>
+  );
 };
 
 export default Chat;
- */

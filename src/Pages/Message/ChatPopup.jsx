@@ -41,7 +41,12 @@ const ChatPopup = ({
 };
 
 ChatPopup.propTypes = {
-  posts: PropTypes.array.isRequired,
+  posts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired, // Ensure id is a string if that's the requirement
+      content: PropTypes.string.isRequired, // Add other required properties of posts
+    })
+  ).isRequired,
   newPostContent: PropTypes.string.isRequired,
   setNewPostContent: PropTypes.func.isRequired,
   handleCreatePost: PropTypes.func.isRequired,

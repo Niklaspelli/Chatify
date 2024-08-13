@@ -27,7 +27,7 @@ const MessageSection = ({ token, username }) => {
       }
       const data = await response.json();
       setPosts(data);
-      fetchUsers(data);
+      // fetchUsers(data);
     } catch (error) {
       setError(error.message);
       console.error("Failed to fetch posts:", error.message);
@@ -36,32 +36,33 @@ const MessageSection = ({ token, username }) => {
     }
   };
 
-  const fetchUsers = async (posts) => {
-    try {
-      const userIds = [...new Set(posts.map((post) => post.userId))];
-      const users = {};
-      await Promise.all(
-        userIds.map(async (userId) => {
-          const response = await fetch(
-            `https://chatify-api.up.railway.app/users/${userId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          if (!response.ok) {
-            throw new Error(`Failed to fetch user with userId: ${userId}`);
-          }
-          const userData = await response.json();
-          users[userId] = userData;
-        })
-      );
-      setUsersMap(users);
-    } catch (error) {
-      console.error("Error fetching users:", error.message);
-    }
-  };
+  // const fetchUsers = async (posts) => {
+  //   try {
+  //     const userIds = [...new Set(posts.map((post) => post.senderId))];
+  //     const users = {};
+  //     await Promise.all(
+  //       userIds.map(async (userId) => {
+  //         const response = await fetch(
+  //           `https://chatify-api.up.railway.app/users/${userId}`,
+  //           {
+  //             headers: {
+  //               Authorization: `Bearer ${token}`,
+  //             },
+  //           }
+  //         );
+  //         if (!response.ok) {
+  //           throw new Error(`Failed to fetch user with userId: ${userId}`);
+  //         }
+  //         const userData = await response.json();
+  //         users[userId] = userData;
+  //       })
+  //     );
+  //     setUsersMap(users);
+  //     console.log("usersMap", usersMap);
+  //   } catch (error) {
+  //     console.error("Error fetching users:", error.message);
+  //   }
+  // };
 
   const handleDelete = async (msgID) => {
     try {
@@ -100,6 +101,7 @@ const MessageSection = ({ token, username }) => {
           posts={posts}
           onDelete={handleDelete}
           username={username}
+          currentUserId={username} // Pass the username as currentUserId if it's used for identification
         />
       )}
     </div>

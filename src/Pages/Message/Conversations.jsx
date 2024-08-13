@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+/* import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import NewMessage from "./NewMessage";
 import Modal from "react-modal";
@@ -148,3 +148,66 @@ Conversation.propTypes = {
 };
 
 export default Conversation;
+ */
+
+import React from "react";
+import PropTypes from "prop-types";
+import ChatPopup from "./ChatPopup";
+
+const Conversations = ({
+  conversations,
+  activeConversationId,
+  onConversationClick,
+  onCreatePost,
+  onDeletePost,
+  newPostContent,
+  setNewPostContent,
+  loading,
+  error,
+  closeChat,
+}) => {
+  return (
+    <div className="conversations">
+      <div className="conversation-list">
+        {Object.keys(conversations).map((convoId) => (
+          <div
+            key={convoId}
+            className={`conversation-item ${
+              convoId === activeConversationId ? "active" : ""
+            }`}
+            onClick={() => onConversationClick(convoId)}
+          >
+            {conversations[convoId].userId}
+          </div>
+        ))}
+      </div>
+      {activeConversationId && (
+        <ChatPopup
+          posts={conversations[activeConversationId].posts || []}
+          newPostContent={newPostContent}
+          setNewPostContent={setNewPostContent}
+          handleCreatePost={() => onCreatePost(activeConversationId)}
+          handleDelete={onDeletePost}
+          loading={loading}
+          error={error}
+          closeChat={closeChat}
+        />
+      )}
+    </div>
+  );
+};
+
+Conversations.propTypes = {
+  conversations: PropTypes.object.isRequired,
+  activeConversationId: PropTypes.string,
+  onConversationClick: PropTypes.func.isRequired,
+  onCreatePost: PropTypes.func.isRequired,
+  onDeletePost: PropTypes.func.isRequired,
+  newPostContent: PropTypes.string.isRequired,
+  setNewPostContent: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired,
+  error: PropTypes.string,
+  closeChat: PropTypes.func.isRequired,
+};
+
+export default Conversations;
