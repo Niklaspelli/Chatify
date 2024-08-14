@@ -18,7 +18,7 @@ const SearchBar = ({ onSearch }) => {
     <div style={searchBarContainerStyle}>
       <input
         type="text"
-        placeholder="Search users..."
+        placeholder="Sök användare..."
         value={query}
         onChange={handleChange}
         style={inputStyle}

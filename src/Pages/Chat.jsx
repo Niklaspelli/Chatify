@@ -5,6 +5,8 @@ import SearchBar from "../Comp/Searchbar/SearchBar";
 import UserList from "../Comp/Searchbar/UserList";
 import NewMessage from "./Message/NewMessage";
 import Invite from "./Message/Invite";
+import Invitations from "./Message/Invitations";
+import MessageSection from "./Message/MessageSection";
 
 const BackendURL = "https://chatify-api.up.railway.app";
 
@@ -90,19 +92,22 @@ const Chat = () => {
       {username && (
         <h2>
           <p>
-            You are logged in as:
+            Du är inloggad som:
             <span className="username">{username}</span>
           </p>
         </h2>
       )}
+
       <SearchBar onSearch={handleSearch} />
       {/* Render the UserList only if a search has been performed */}
       {hasSearched &&
         (filteredUsers.length === 0 ? (
-          <p>No users found</p> // Display a message when there are no search results
+          <p>Inga användare hittade</p> // Display a message when there are no search results
         ) : (
           <UserList users={filteredUsers} token={token} />
         ))}
+      <Invitations token={token} id={id} />
+
       {isAuthenticated && <NewMessage token={token} id={id} />}
       {error && (
         <div role="alert" className="ml-1 mt-4 w-52 alert alert-error">
