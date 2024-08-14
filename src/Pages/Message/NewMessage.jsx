@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
-import MessageList from "./MessageList";
+import IncomingMessages from "./IncomingMessages";
 
 const NewMessage = ({ token, id }) => {
   const [newPostContent, setNewPostContent] = useState("");
-  const [newPostConversationId, setNewPostConversationId] = useState(""); // State to hold conversationId
+  const [conversationId, setConversationId] = useState(""); // State to hold conversationId
   const [posts, setPosts] = useState([]);
   const [users, setUsers] = useState([]);
-  const [currentUser, setCurrentUser] = useState(null); // State to hold current user info
+  const [currentUser, setCurrentUser] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [sending, setSending] = useState(false);
+  const [replyToMessageId, setReplyToMessageId] = useState(null); // State to track the message being replied to
 
   useEffect(() => {
     fetchPosts();
@@ -33,6 +34,10 @@ const NewMessage = ({ token, id }) => {
       }
       const data = await response.json();
       setPosts(data);
+      // Set conversationId from the first post if available
+      if (data.length > 0) {
+        setConversationId(data[0].conversationId);
+      }
     } catch (error) {
       setError(error.message);
       console.error("Failed to fetch posts:", error.message);
@@ -55,8 +60,7 @@ const NewMessage = ({ token, id }) => {
       }
       const data = await response.json();
       setUsers(data);
-      // Assuming the first user in the list is the current user
-      setCurrentUser(data[0]); // Adjust this based on your actual user identification logic
+      setCurrentUser(data[0]);
     } catch (error) {
       setError(error.message);
       console.error("Failed to fetch users:", error.message);
@@ -72,7 +76,7 @@ const NewMessage = ({ token, id }) => {
       return;
     }
 
-    if (!newPostConversationId.trim()) {
+    if (!conversationId.trim()) {
       setError("Conversation ID cannot be empty");
       return;
     }
@@ -84,8 +88,8 @@ const NewMessage = ({ token, id }) => {
 
     const payload = {
       text: newPostContent,
-      conversationId: newPostConversationId, // Include conversationId in the payload
-      user: id, // Assuming currentUser has a username property
+      conversationId: conversationId,
+      user: id,
     };
 
     setSending(true);
@@ -108,9 +112,10 @@ const NewMessage = ({ token, id }) => {
       }
 
       const createdPost = await response.json();
+      console.log("Created Post:", createdPost); // Debugging log
       setNewPostContent("");
-      setNewPostConversationId(""); // Clear the conversation ID after sending
-      setPosts([createdPost, ...posts]);
+      setReplyToMessageId(null);
+      setPosts((prevPosts) => [createdPost, ...prevPosts]); // Avoiding duplication
     } catch (error) {
       setError(error.message);
     } finally {
@@ -141,21 +146,39 @@ const NewMessage = ({ token, id }) => {
     }
   };
 
+  const handleReply = (messageId) => {
+    setReplyToMessageId(messageId);
+    // Optionally set conversationId based on the message being replied to
+    const message = posts.find((post) => post.id === messageId);
+    if (message) {
+      setConversationId(message.conversationId); // Ensure conversationId is the same for replies
+    }
+  };
+
   return (
     <div>
       {loading ? (
         <p>Laddar meddelanden...</p>
       ) : (
-        <MessageList posts={posts} onDelete={handleDelete} id={id} />
+        <IncomingMessages
+          posts={posts}
+          token={token}
+          onDelete={handleDelete}
+          onReply={handleReply}
+          id={id}
+        />
       )}
       <h2>Svara:</h2>
+
       {error && <div style={{ color: "red" }}>Error: {error}</div>}
-      <textarea
-        placeholder="Conversation ID:"
-        value={newPostConversationId}
-        onChange={(e) => setNewPostConversationId(e.target.value)}
+      <label>Fyll i ditt ConversationId för att starta chatten:</label>
+      <input
+        type="text"
+        placeholder="Conversation ID"
+        value={conversationId}
+        onChange={(e) => setConversationId(e.target.value)}
         disabled={sending}
-      ></textarea>
+      />
       <textarea
         placeholder="Meddelande:"
         value={newPostContent}

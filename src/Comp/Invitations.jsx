@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../../index.css";
+import "../index.css";
 
 function Invitations({ token, id }) {
   const [invitations, setInvitations] = useState([]);
