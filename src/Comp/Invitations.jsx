@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../index.css";
 
-function Invitations({ token, id }) {
+function Invitations({ token, id, users }) {
   const [invitations, setInvitations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -50,6 +50,17 @@ function Invitations({ token, id }) {
             </ul>
           ) : (
             <p>Du har inga inbjudningar just nu.</p>
+          )}
+          {/* Additional logic to use the `users` prop if needed */}
+          {users && users.length > 0 && (
+            <div>
+              <h3>Tillgängliga användare:</h3>
+              <ul>
+                {users.map((user) => (
+                  <li key={user.id}>{user.username}</li>
+                ))}
+              </ul>
+            </div>
           )}
         </>
       )}

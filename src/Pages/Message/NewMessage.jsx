@@ -166,6 +166,7 @@ const NewMessage = ({ token, id }) => {
           onDelete={handleDelete}
           onReply={handleReply}
           id={id}
+          users={users}
         />
       )}
       <h2>Svara:</h2>

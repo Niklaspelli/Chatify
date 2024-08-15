@@ -1,11 +1,14 @@
 import React from "react";
 
-const MessageList = ({ posts, onDelete, currentUserId }) => {
+const MessageList = ({ posts, onDelete, currentUserId, users }) => {
+  const getUserNameByUserId = (userId) => {
+    const user = users.find((user) => user.userId === userId);
+    return user ? user.username : "Unknown User";
+  };
+
   if (!posts || posts.length === 0) {
     return <p>No messages yet.</p>;
   }
-
-  console.log("Rendering MessageList with posts:", posts); // Debugging statement
 
   return (
     <div style={messageListStyle}>
@@ -21,8 +24,9 @@ const MessageList = ({ posts, onDelete, currentUserId }) => {
             color: post.senderId === currentUserId ? "#ffffff" : "#000000",
           }}
         >
-          <p className="username">{post.userId}:</p>
-          <p className="message-text">{post.text}</p>
+          <p className="username">{getUserNameByUserId(post.userId)}:</p>
+
+          <p>{post.text}</p>
           <p>Sent: {new Date(post.createdAt).toLocaleString()}</p>
           <p>Conversation ID: {post.conversationId}</p>
           <p>Message ID: {post.id}</p>
