@@ -5,7 +5,6 @@ function Invitations({ token, id }) {
   const [invitations, setInvitations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [copySuccess, setCopySuccess] = useState("");
 
   useEffect(() => {
     fetchInvitations();
@@ -34,16 +33,6 @@ function Invitations({ token, id }) {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleCopy = (text) => {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => setCopySuccess("Copied!"))
-      .catch(() => setCopySuccess("Failed to copy!"));
-
-    // Clear the message after 2 seconds
-    setTimeout(() => setCopySuccess(""), 2000);
   };
 
   return (
