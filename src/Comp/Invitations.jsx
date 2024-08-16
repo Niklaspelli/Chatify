@@ -43,15 +43,16 @@ function Invitations({ token, id, users }) {
       {!loading && !error && (
         <>
           {invitations.length > 0 ? (
-            <ul>
-              {invitations.map((invite, index) => (
-                <li key={index}>{invite.invite}</li>
-              ))}
-            </ul>
+            <div className="scrollable-list">
+              <ul>
+                {invitations.map((invite, index) => (
+                  <li key={index}>{invite.invite}</li>
+                ))}
+              </ul>
+            </div>
           ) : (
             <p>Du har inga inbjudningar just nu.</p>
           )}
-          {/* Additional logic to use the `users` prop if needed */}
           {users && users.length > 0 && (
             <div>
               <h3>Tillgängliga användare:</h3>

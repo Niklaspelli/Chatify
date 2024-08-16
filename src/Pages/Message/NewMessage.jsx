@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import IncomingMessages from "./IncomingMessages";
+import { Container, Button, Col, Row } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
 
 const NewMessage = ({ token, id }) => {
   const [newPostContent, setNewPostContent] = useState("");
@@ -156,41 +158,53 @@ const NewMessage = ({ token, id }) => {
   };
 
   return (
-    <div>
-      {loading ? (
-        <p>Laddar meddelanden...</p>
-      ) : (
-        <IncomingMessages
-          posts={posts}
-          token={token}
-          onDelete={handleDelete}
-          onReply={handleReply}
-          id={id}
-          users={users}
-        />
-      )}
-      <h2>Svara:</h2>
+    <div style={LoginContainerStyle}>
+      <Container>
+        {loading ? (
+          <p>Laddar meddelanden...</p>
+        ) : (
+          <IncomingMessages
+            posts={posts}
+            token={token}
+            onDelete={handleDelete}
+            onReply={handleReply}
+            id={id}
+            users={users}
+          />
+        )}
+        <h2>Svara:</h2>
 
-      {error && <div style={{ color: "red" }}>Error: {error}</div>}
-      <label>Fyll i ditt ConversationId för att starta chatten:</label>
-      <input
-        type="text"
-        placeholder="Conversation ID"
-        value={conversationId}
-        onChange={(e) => setConversationId(e.target.value)}
-        disabled={sending}
-      />
-      <textarea
-        placeholder="Meddelande:"
-        value={newPostContent}
-        onChange={(e) => setNewPostContent(e.target.value)}
-        disabled={sending}
-      ></textarea>
-      <button onClick={handleCreatePost} disabled={sending}>
-        {sending ? "Skickar..." : "Skicka"}
-      </button>
+        {error && <div style={{ color: "red" }}>Error: {error}</div>}
+        <label>Fyll i ditt ConversationId för att starta chatten:</label>
+        <Form.Floating className="mb-2" inline style={{ width: "400px" }}>
+          <input
+            type="text"
+            placeholder="Conversation ID"
+            value={conversationId}
+            onChange={(e) => setConversationId(e.target.value)}
+            disabled={sending}
+          />
+        </Form.Floating>
+        <Form.Floating className="mb-2" inline style={{ width: "400px" }}>
+          <textarea
+            placeholder="Meddelande:"
+            value={newPostContent}
+            onChange={(e) => setNewPostContent(e.target.value)}
+            disabled={sending}
+          ></textarea>
+        </Form.Floating>
+        <button onClick={handleCreatePost} disabled={sending}>
+          {sending ? "Skickar..." : "Skicka"}
+        </button>
+      </Container>
     </div>
   );
+};
+
+const LoginContainerStyle = {
+  marginBottom: "15px",
+  display: "flex",
+  justifyContent: "center",
 };
 
 export default NewMessage;

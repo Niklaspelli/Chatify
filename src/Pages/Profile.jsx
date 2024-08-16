@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { Button } from "react-bootstrap";
 
 const Profile = () => {
   const location = useLocation();
@@ -86,33 +87,42 @@ const Profile = () => {
 
   return (
     <div>
-      <h2>Profile</h2>
-      {error && (
-        <div role="alert" className="ml-1 mt-4 w-52 alert alert-error">
-          <span className="text-xs text-center">{error}</span>
-        </div>
-      )}
-      {!showConfirmation ? (
-        <button
-          onClick={handleConfirmDelete}
-          disabled={isLoading}
-          aria-busy={isLoading}
-        >
-          {isLoading ? "Deleting..." : "Delete Account"}
-        </button>
-      ) : (
-        <div className="confirmation-prompt">
-          <p>Är du säker att vill radera kontot?</p>
-          <button onClick={handleConfirmAction} className="btn btn-primary">
-            Yes
-          </button>
-          <button onClick={handleCancelDelete} className="btn btn-secondary">
-            No
-          </button>
-        </div>
-      )}
+      <div style={ChatContainerStyle}>
+        {error && (
+          <div role="alert" className="ml-1 mt-4 w-52 alert alert-error">
+            <span className="text-xs text-center">{error}</span>
+          </div>
+        )}
+        {!showConfirmation ? (
+          <Button
+            style={{ backgroundColor: "black", margin: "20px" }}
+            onClick={handleConfirmDelete}
+            disabled={isLoading}
+            aria-busy={isLoading}
+          >
+            {isLoading ? "Deleting..." : "Delete Account"}
+          </Button>
+        ) : (
+          <div className="confirmation-prompt">
+            <p>Är du säker att vill radera kontot?</p>
+            <button onClick={handleConfirmAction} className="btn btn-primary">
+              Yes
+            </button>
+            <button onClick={handleCancelDelete} className="btn btn-secondary">
+              No
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
+};
+
+const ChatContainerStyle = {
+  marginBottom: "30px",
+  display: "flex",
+  position: "relative",
+  justifyContent: "center",
 };
 
 export default Profile;

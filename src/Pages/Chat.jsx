@@ -96,16 +96,17 @@ const Chat = () => {
   }
 
   return (
-    <div>
-      {username && (
-        <h2>
-          <p>
-            Du är inloggad som:
-            <span className="username">{username}</span>
-          </p>
-        </h2>
-      )}
-
+    <>
+      <div style={ChatContainerStyle}>
+        {username && (
+          <h2>
+            <p>
+              Du är inloggad som:
+              <span className="username">{username}</span>
+            </p>
+          </h2>
+        )}
+      </div>
       <SearchBar onSearch={handleSearch} />
       {hasSearched &&
         (filteredUsers.length === 0 ? (
@@ -129,8 +130,14 @@ const Chat = () => {
           <span className="text-xs text-center">{error}</span>
         </div>
       )}
-    </div>
+    </>
   );
+};
+
+const ChatContainerStyle = {
+  marginBottom: "15px",
+  display: "flex",
+  justifyContent: "center",
 };
 
 export default Chat;

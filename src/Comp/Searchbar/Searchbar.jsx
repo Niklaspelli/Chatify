@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 
 const SearchBar = ({ onSearch }) => {
   const [query, setQuery] = useState("");
@@ -45,10 +44,6 @@ const inputStyle = {
   outline: "none",
   fontSize: "16px",
   transition: "border-color 0.3s ease",
-};
-
-SearchBar.propTypes = {
-  onSearch: PropTypes.func.isRequired, // Validate that onSearch is a function
 };
 
 export default SearchBar;
