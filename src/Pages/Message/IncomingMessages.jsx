@@ -1,15 +1,11 @@
 import React, { useState } from "react";
-import MessageList from "./MessageList"; // Ensure this component handles the 'currentUserId' and 'users' props
+import MessageList from "./MessageList";
 
 const IncomingMessages = ({ token, currentUserId, id, users }) => {
   const [conversationId, setConversationId] = useState("");
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  /*   useEffect(() => {
-    fetchUsers();
-  }, [token]); */
 
   const handleFetchMessages = async () => {
     if (!conversationId) {
@@ -66,34 +62,6 @@ const IncomingMessages = ({ token, currentUserId, id, users }) => {
     }
   };
 
-  /* const fetchUsers = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await fetch("https://chatify-api.up.railway.app/users", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch users");
-      }
-
-      const data = await response.json();
-      // Assuming `setUsers` is coming from parent, this should be passed as a prop if needed
-      // setUsers(data);
-      console.log("Fetched users:", data);
-      // Assuming `setCurrentUser` is a state setter function that needs to be passed as a prop
-      // setCurrentUser(data[0]);
-    } catch (error) {
-      setError(error.message);
-      console.error("Failed to fetch users:", error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  }; */
-
   return (
     <div>
       <h2>Hämta din chatt med ConversationId :)</h2>
@@ -116,7 +84,7 @@ const IncomingMessages = ({ token, currentUserId, id, users }) => {
         <MessageList
           posts={messages}
           onDelete={handleDeleteMessage} // Pass the delete handler
-          currentUserId={currentUserId}
+          /* currentUserId={currentUserId} */
           id={id} // Pass the current user ID
           users={users}
         />

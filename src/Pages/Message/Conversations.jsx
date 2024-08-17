@@ -150,7 +150,7 @@ Conversation.propTypes = {
 export default Conversation;
  */
 
-import React from "react";
+/* import React from "react";
 import PropTypes from "prop-types";
 import ChatPopup from "./ChatPopup";
 
@@ -211,3 +211,4 @@ Conversations.propTypes = {
 };
 
 export default Conversations;
+ */

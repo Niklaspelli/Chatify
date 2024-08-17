@@ -1,13 +1,19 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
-const MessageList = ({ posts, onDelete, currentUserId, users }) => {
-  const getUserNameByUserId = (userId) => {
-    const user = users.find((user) => user.userId === userId);
+const MessageList = ({ posts, onDelete, id, users }) => {
+  const getUserById = (userId) => {
+    return users.find((user) => user.userId === userId);
+  };
+
+  const UserNameId = (userId) => {
+    const user = getUserById(userId);
     return user ? user.username : "Unknown User";
   };
 
-  const getUserAvatarByUserId = (userId) => {
-    const user = users.find((user) => user.userId === userId);
+  const AvatarId = (userId) => {
+    const user = getUserById(userId);
     return user ? user.avatar : "https://i.pravatar.cc/200";
   };
 
@@ -17,51 +23,74 @@ const MessageList = ({ posts, onDelete, currentUserId, users }) => {
 
   return (
     <div style={messageListStyle}>
-      {posts.map((post) => (
-        <div
-          key={post.id}
-          style={{
-            display: "flex",
-            justifyContent:
-              post.senderId === currentUserId ? "flex-start" : "flex-start",
-          }}
-        >
+      {posts.map((post) => {
+        const user = getUserById(post.userId); // Get user object for the post
+        const isCurrentUser = user && user.userId === id;
+
+        return (
           <div
+            key={post.id}
             style={{
-              ...messageStyle,
-              backgroundColor:
-                post.senderId === currentUserId ? "#000000" : "#fff3e0",
-              color: post.senderId === currentUserId ? "#ffffff" : "#000000",
-              maxWidth: "60%",
+              display: "flex",
+              justifyContent: isCurrentUser ? "flex-end" : "flex-start", // Aligns the entire box based on sender
+              marginBottom: "10px",
             }}
           >
-            <img
-              src={getUserAvatarByUserId(post.userId)}
-              alt="avatar"
-              style={{ width: 50, height: 50, borderRadius: "50%" }}
-            />
-            <p className="username">{getUserNameByUserId(post.userId)}:</p>
-            <p>{post.text}</p>
-            <p style={{ fontSize: "0.8em", color: "#999" }}>
-              Sent: {new Date(post.createdAt).toLocaleString()}
-            </p>
-            <p style={{ fontSize: "0.8em", color: "#999" }}>
-              Conversation ID: {post.conversationId}
-            </p>
-            <p style={{ fontSize: "0.8em", color: "#999" }}>
-              Message ID: {post.id}
-            </p>
-            {post.senderId === currentUserId && (
-              <button
-                onClick={() => onDelete(post.id)}
-                style={{ marginTop: "10px" }}
-              >
-                Delete
-              </button>
-            )}
+            <div
+              style={{
+                backgroundColor: isCurrentUser ? "grey" : "black", // Different color for current user
+                color: "white",
+                padding: "10px",
+                borderRadius: "10px",
+                maxWidth: "60%", // Restrict width of message box
+                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)", // Add shadow for depth
+                display: "flex",
+                alignItems: "center", // Center items vertically
+                flexDirection: isCurrentUser ? "row-reverse" : "row", // Switch direction for avatar
+              }}
+            >
+              <img
+                src={AvatarId(post.userId)}
+                alt="avatar"
+                style={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: "50%",
+                  marginLeft: isCurrentUser ? "10px" : "0",
+                  marginRight: !isCurrentUser ? "10px" : "0",
+                }}
+              />
+              <div>
+                <p
+                  className="username"
+                  style={{ margin: 0, fontWeight: "bold" }}
+                >
+                  {UserNameId(post.userId)}
+                </p>
+                <p style={{ margin: "5px 0" }}>{post.text}</p>
+                <p style={{ fontSize: "0.8em", color: "white" }}>
+                  Sent: {new Date(post.createdAt).toLocaleString()}
+                </p>
+                <p style={{ fontSize: "0.8em", color: "#999" }}>
+                  Conversation ID: {post.conversationId}
+                </p>
+                <p style={{ fontSize: "0.8em", color: "#999" }}>
+                  Message ID: {post.id}
+                </p>
+                {isCurrentUser && (
+                  <button
+                    onClick={() => onDelete(post.id)}
+                    style={deleteButtonStyle}
+                    aria-label="Delete"
+                  >
+                    <FontAwesomeIcon icon={faTrashAlt} />
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };
@@ -76,14 +105,15 @@ const messageListStyle = {
   margin: "10px",
 };
 
-// Styles for individual messages
-const messageStyle = {
-  display: "flex",
-  flexDirection: "column",
-  padding: "10px",
-  borderRadius: "5px",
-  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-  wordBreak: "break-word",
+// Styles for the delete button
+const deleteButtonStyle = {
+  background: "none",
+  border: "none",
+  cursor: "pointer",
+  padding: "5px",
+  marginTop: "10px",
+  color: "white",
+  fontSize: "20px",
 };
 
 export default MessageList;

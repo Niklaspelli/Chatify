@@ -1,4 +1,4 @@
-import React from "react";
+/* import React from "react";
 import PropTypes from "prop-types";
 import MessageList from "./MessageList";
 
@@ -83,3 +83,4 @@ const popupStyle = {
 };
 
 export default ChatPopup;
+ */

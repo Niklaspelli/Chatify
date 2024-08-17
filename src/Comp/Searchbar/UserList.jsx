@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import Invite from "../../Pages/Message/Invite";
 
 const UserList = ({ users, token }) => {
@@ -27,16 +26,6 @@ const userStyle = {
   justifyContent: "space-between",
   alignItems: "center",
   marginBottom: "10px",
-};
-
-UserList.propTypes = {
-  users: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired, // Ensure 'id' is correct
-      username: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  token: PropTypes.string.isRequired,
 };
 
 export default UserList;

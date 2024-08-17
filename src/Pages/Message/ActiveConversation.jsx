@@ -1,4 +1,4 @@
-import React from "react";
+/* import React from "react";
 import PropTypes from "prop-types";
 import MessageList from "./MessageList";
 
@@ -48,3 +48,4 @@ ActiveConversation.propTypes = {
 };
 
 export default ActiveConversation;
+ */

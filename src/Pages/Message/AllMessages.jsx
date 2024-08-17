@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+/* import React, { useEffect, useState } from "react";
 
 const AllMessages = ({ token, userId }) => {
   const [messages, setMessages] = useState([]);
@@ -74,3 +74,4 @@ const AllMessages = ({ token, userId }) => {
 };
 
 export default AllMessages;
+ */
