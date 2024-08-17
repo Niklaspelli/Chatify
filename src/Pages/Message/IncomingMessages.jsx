@@ -83,9 +83,8 @@ const IncomingMessages = ({ token, currentUserId, id, users }) => {
       {!isLoading && messages.length > 0 && (
         <MessageList
           posts={messages}
-          onDelete={handleDeleteMessage} // Pass the delete handler
-          /* currentUserId={currentUserId} */
-          id={id} // Pass the current user ID
+          onDelete={handleDeleteMessage}
+          id={id}
           users={users}
         />
       )}

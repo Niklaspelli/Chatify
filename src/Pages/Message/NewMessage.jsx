@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import IncomingMessages from "./IncomingMessages";
-import { Container, Button, Col, Row } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
+import DOMPurify from "dompurify";
 
 const NewMessage = ({ token, id }) => {
   const [newPostContent, setNewPostContent] = useState("");
@@ -73,7 +74,10 @@ const NewMessage = ({ token, id }) => {
 
   const handleCreatePost = async () => {
     setError(null);
-    if (!newPostContent.trim()) {
+
+    const sanitizedText = DOMPurify.sanitize(newPostContent);
+
+    if (!sanitizedText.trim()) {
       setError("Message content cannot be empty");
       return;
     }
@@ -89,7 +93,7 @@ const NewMessage = ({ token, id }) => {
     }
 
     const payload = {
-      text: newPostContent,
+      text: sanitizedText,
       conversationId: conversationId,
       user: id,
     };
@@ -114,10 +118,10 @@ const NewMessage = ({ token, id }) => {
       }
 
       const createdPost = await response.json();
-      console.log("Created Post:", createdPost); // Debugging log
+      console.log("Created Post:", createdPost);
       setNewPostContent("");
       setReplyToMessageId(null);
-      setPosts((prevPosts) => [createdPost, ...prevPosts]); // Avoiding duplication
+      setPosts((prevPosts) => [createdPost, ...prevPosts]);
     } catch (error) {
       setError(error.message);
     } finally {
@@ -150,10 +154,10 @@ const NewMessage = ({ token, id }) => {
 
   const handleReply = (messageId) => {
     setReplyToMessageId(messageId);
-    // Optionally set conversationId based on the message being replied to
+
     const message = posts.find((post) => post.id === messageId);
     if (message) {
-      setConversationId(message.conversationId); // Ensure conversationId is the same for replies
+      setConversationId(message.conversationId);
     }
   };
 

@@ -38,8 +38,8 @@ const MessageList = ({ posts, onDelete, id, users }) => {
           >
             <div
               style={{
-                backgroundColor: isCurrentUser ? "grey" : "black", // Different color for current user
-                color: "white",
+                backgroundColor: isCurrentUser ? "#3c3c3c" : "black", // Different color for current user
+                color: isCurrentUser ? "white" : "white",
                 padding: "10px",
                 borderRadius: "10px",
                 maxWidth: "60%", // Restrict width of message box

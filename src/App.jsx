@@ -18,7 +18,6 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="/chat" element={<Chat />} />
             <Route path="/Profile" element={<Profile />} />
-            {/* handle other routes */}
           </Route>
         </Routes>
       </div>
