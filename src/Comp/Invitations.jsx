@@ -36,37 +36,46 @@ function Invitations({ token, id, users }) {
   };
 
   return (
-    <div>
+    <div style={InvitationsContainerStyle}>
       <h2>Dina inbjudningar!</h2>
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
       {!loading && !error && (
-        <>
-          {invitations.length > 0 ? (
-            <div className="scrollable-list">
-              <ul>
-                {invitations.map((invite, index) => (
-                  <li key={index}>{invite.invite}</li>
-                ))}
-              </ul>
-            </div>
-          ) : (
-            <p>Du har inga inbjudningar just nu.</p>
-          )}
-          {users && users.length > 0 && (
-            <div>
-              <h3>Tillgängliga användare:</h3>
-              <ul>
-                {users.map((user) => (
-                  <li key={user.id}>{user.username}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </>
+        <div className="dropdown">
+          <button className="dropbtn">Klicka här</button>
+          <div className="dropdown-content">
+            {invitations.length > 0 ? (
+              <div className="scrollable-list">
+                <ul>
+                  {invitations.map((invite, index) => (
+                    <li key={index}>{invite.invite}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <p>Du har inga inbjudningar just nu.</p>
+            )}
+            {users && users.length > 0 && (
+              <div>
+                <h3>Tillgängliga användare:</h3>
+                <ul>
+                  {users.map((user) => (
+                    <li key={user.id}>{user.username}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );
 }
 
 export default Invitations;
+
+const InvitationsContainerStyle = {
+  marginBottom: "15px",
+  display: "flex",
+  justifyContent: "center",
+};

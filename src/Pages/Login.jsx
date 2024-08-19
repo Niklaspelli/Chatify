@@ -65,27 +65,21 @@ const Login = () => {
 
       const token = data.token;
 
-      // Decode the JWT token payload
       const decodedToken = JSON.parse(atob(token.split(".")[1]));
 
-      // Log the entire decoded token payload for debugging
       console.log("Decoded Token Payload:", decodedToken);
 
-      // Extract the ID from the decoded token
       const id = decodedToken.id;
 
       console.log("Token:", token);
       console.log("Id:", id);
 
-      // Store the token and userId in local storage
       localStorage.setItem("Id", id);
       localStorage.setItem("token", token);
 
-      // Optionally, store other user info (e.g., username)
       const loggedInUsername = decodedToken.user;
       localStorage.setItem("loggedInUsername", loggedInUsername);
 
-      // Simulate authentication using fakeAuth
       fakeAuth.signIn(() => {
         setCorrectCredentials(true);
         navigate("/chat", { state: { username: loggedInUsername, id } });

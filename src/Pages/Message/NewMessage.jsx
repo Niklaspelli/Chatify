@@ -37,7 +37,7 @@ const NewMessage = ({ token, id }) => {
       }
       const data = await response.json();
       setPosts(data);
-      // Set conversationId from the first post if available
+
       if (data.length > 0) {
         setConversationId(data[0].conversationId);
       }

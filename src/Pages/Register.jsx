@@ -5,7 +5,7 @@ import {
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Container, Button, Row, Col } from "react-bootstrap";
+import { Button, Row, Col } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 
 const USER_REGEX = /^[A-Öa-ö][A-z0-9-_åäöÅÄÖ]{3,23}$/;
@@ -159,13 +159,13 @@ function Register() {
           username: user,
           password: pwd,
           email: email,
-          avatar: "", // Ensure this is handled as expected by the server
-          csrfToken: csrfToken, // Verify if this is needed
+          avatar: "",
+          csrfToken: csrfToken,
         }),
       });
 
       if (!response.ok) {
-        const errorData = await response.json(); // Parsing error response
+        const errorData = await response.json();
         throw new Error(errorData.message || "User and email already in use");
       }
 

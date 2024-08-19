@@ -7,7 +7,7 @@ const SearchBar = ({ onSearch }) => {
     const newQuery = event.target.value;
     setQuery(newQuery);
     if (typeof onSearch === "function") {
-      onSearch(newQuery); // Pass the query to the parent component
+      onSearch(newQuery);
     } else {
       console.error("onSearch is not a function");
     }
@@ -27,7 +27,6 @@ const SearchBar = ({ onSearch }) => {
   );
 };
 
-// Styles
 const searchBarContainerStyle = {
   marginBottom: "15px",
   display: "flex",

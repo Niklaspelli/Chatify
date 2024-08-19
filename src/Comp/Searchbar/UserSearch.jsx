@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from "react";
+/* import React, { useState, useEffect } from "react";
 import SearchBar from "./SearchBar";
 import UserList from "./UserList";
 
 const BackendURL = "https://chatify-api.up.railway.app";
 
 const UserSearch = ({ token }) => {
-  const [users, setUsers] = useState([]); // All users fetched from API
-  const [filteredUsers, setFilteredUsers] = useState([]); // Users that match the search
+  const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [hasSearched, setHasSearched] = useState(false); // Track if a search has been performed
+  const [hasSearched, setHasSearched] = useState(false);
 
-  // Fetch users from the backend
   const fetchUsers = async () => {
     try {
       const response = await fetch(`${BackendURL}/users`, {
@@ -42,9 +41,8 @@ const UserSearch = ({ token }) => {
     }
   }, [token]);
 
-  // Handle search query and filter users
   const handleSearch = (query) => {
-    setHasSearched(true); // Mark that a search has been performed
+    setHasSearched(true);
     if (query) {
       const lowercasedQuery = query.toLowerCase();
       const filtered = users.filter((user) =>
@@ -52,7 +50,7 @@ const UserSearch = ({ token }) => {
       );
       setFilteredUsers(filtered);
     } else {
-      setFilteredUsers([]); // Show no users if query is empty
+      setFilteredUsers([]);
     }
   };
 
@@ -67,11 +65,11 @@ const UserSearch = ({ token }) => {
   return (
     <div>
       <SearchBar onSearch={handleSearch} />
-      {/* Render UserList only if a search has been performed */}
+
       {hasSearched && (
         <>
           {filteredUsers.length === 0 ? (
-            <div>No users found</div> // Display message if no users match the search
+            <div>No users found</div>
           ) : (
             <UserList users={filteredUsers} token={token} />
           )}
@@ -82,3 +80,4 @@ const UserSearch = ({ token }) => {
 };
 
 export default UserSearch;
+ */

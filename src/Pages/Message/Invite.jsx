@@ -1,14 +1,12 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 
 function Invite({ id, token }) {
   const [inviteUrl, setInviteUrl] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate();
 
-  // Function to generate a UUID
   const generateUUID = () => {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) =>
       (c === "x"
@@ -18,28 +16,27 @@ function Invite({ id, token }) {
     );
   };
 
-  // Function to send the invite
   const sendInvite = async () => {
-    console.log("Invite ID:", id); // Log the ID
+    console.log("Invite ID:", id);
     if (!id) {
       setError("No user ID provided");
       return;
     }
 
-    const uuid = generateUUID(); // Generate the UUID
+    const uuid = generateUUID();
     setLoading(true);
-    setError(null); // Clear previous errors
+    setError(null);
 
     try {
       const response = await fetch(
-        `https://chatify-api.up.railway.app/invite/${id}`, // API endpoint
+        `https://chatify-api.up.railway.app/invite/${id}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Include the token
+            Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ conversationId: uuid }), // Send the UUID as conversationId
+          body: JSON.stringify({ conversationId: uuid }),
         }
       );
 
@@ -55,8 +52,7 @@ function Invite({ id, token }) {
         data.inviteUrl || `https://chatify-api.up.railway.app/invite/${id}`
       );
 
-      // Redirect to NewMessage component or desired route
-      navigate("/chat"); // Ensure the path matches your route configuration
+      navigate("/chat");
     } catch (err) {
       setError(`Error: ${err.message}`);
     } finally {
@@ -85,10 +81,5 @@ function Invite({ id, token }) {
     </div>
   );
 }
-
-Invite.propTypes = {
-  id: PropTypes.number.isRequired, // Ensure prop name matches and is a number
-  token: PropTypes.string.isRequired,
-};
 
 export default Invite;

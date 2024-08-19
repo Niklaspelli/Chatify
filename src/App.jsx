@@ -6,13 +6,16 @@ import Navbar from "./Comp/Navbar";
 import Profile from "./Pages/Profile";
 import Register from "./Pages/Register";
 import Chat from "./Pages/Chat";
+import Home from "./Pages/Home";
 
 function App() {
   return (
     <>
       <Navbar />
+
       <div>
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/Register" element={<Register />} />
           <Route element={<ProtectedRoute />}>

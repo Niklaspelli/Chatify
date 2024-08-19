@@ -24,7 +24,7 @@ const MessageList = ({ posts, onDelete, id, users }) => {
   return (
     <div style={messageListStyle}>
       {posts.map((post) => {
-        const user = getUserById(post.userId); // Get user object for the post
+        const user = getUserById(post.userId);
         const isCurrentUser = user && user.userId === id;
 
         return (
@@ -32,21 +32,21 @@ const MessageList = ({ posts, onDelete, id, users }) => {
             key={post.id}
             style={{
               display: "flex",
-              justifyContent: isCurrentUser ? "flex-end" : "flex-start", // Aligns the entire box based on sender
+              justifyContent: isCurrentUser ? "flex-end" : "flex-start",
               marginBottom: "10px",
             }}
           >
             <div
               style={{
-                backgroundColor: isCurrentUser ? "#3c3c3c" : "black", // Different color for current user
+                backgroundColor: isCurrentUser ? "#3c3c3c" : "black",
                 color: isCurrentUser ? "white" : "white",
                 padding: "10px",
                 borderRadius: "10px",
-                maxWidth: "60%", // Restrict width of message box
-                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)", // Add shadow for depth
+                maxWidth: "60%",
+                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
                 display: "flex",
-                alignItems: "center", // Center items vertically
-                flexDirection: isCurrentUser ? "row-reverse" : "row", // Switch direction for avatar
+                alignItems: "center",
+                flexDirection: isCurrentUser ? "row-reverse" : "row",
               }}
             >
               <img
@@ -95,7 +95,6 @@ const MessageList = ({ posts, onDelete, id, users }) => {
   );
 };
 
-// Styles for the message list container
 const messageListStyle = {
   display: "flex",
   flexDirection: "column",
@@ -105,7 +104,6 @@ const messageListStyle = {
   margin: "10px",
 };
 
-// Styles for the delete button
 const deleteButtonStyle = {
   background: "none",
   border: "none",

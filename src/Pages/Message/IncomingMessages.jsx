@@ -55,7 +55,6 @@ const IncomingMessages = ({ token, currentUserId, id, users }) => {
         throw new Error(`Failed to delete message: ${response.statusText}`);
       }
 
-      // Remove deleted message from state
       setMessages(messages.filter((post) => post.id !== postId));
     } catch (error) {
       console.error("Failed to delete message:", error.message);

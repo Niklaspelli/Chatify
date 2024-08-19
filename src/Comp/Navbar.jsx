@@ -16,13 +16,12 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Update authentication status
     setIsAuthenticated(fakeAuth.isAuthenticated);
-  }, [fakeAuth.isAuthenticated]); // Dependency on auth status
+  }, [fakeAuth.isAuthenticated]);
 
   const logout = () => {
     fakeAuth.signOut(() => {
-      navigate("/login");
+      navigate("/");
     });
   };
 
