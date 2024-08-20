@@ -3,7 +3,7 @@
   line-height: 1.5;
   font-weight: 400;
   min-height: 100vh;
-  color-scheme: light dark;
+  color-scheme: white;
   color: rgba(255, 255, 255, 0.87);
   background: linear-gradient(#230d55, #0a315e);
   background-size: cover;
@@ -36,6 +36,7 @@ button {
   font-weight: 500;
   font-family: inherit;
   background-color: #1a1a1a;
+  color: white;
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -51,7 +52,7 @@ button:focus-visible {
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
+    color: white;
     background-color: #ffffff;
   }
 
