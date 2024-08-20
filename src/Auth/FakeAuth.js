@@ -1,20 +1,3 @@
-/* const fakeAuth = {
-  isAuthenticated: null,
-
-  signIn(callback) {
-    fakeAuth.isAuthenticated = true;
-    setTimeout(callback, 300);
-  },
-
-  signOut(callback) {
-    fakeAuth.isAuthenticated = false;
-    setTimeout(callback, 300);
-  },
-};
-
-export default fakeAuth;
- */
-
 const fakeAuth = {
   isAuthenticated: false,
 
@@ -31,7 +14,7 @@ const fakeAuth = {
 
   signOut(callback) {
     this.isAuthenticated = false;
-    localStorage.removeItem("token"); // Clear token on sign out
+    localStorage.removeItem("token");
     setTimeout(callback, 300);
   },
 };

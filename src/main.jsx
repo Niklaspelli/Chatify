@@ -4,7 +4,7 @@ import App from "./App.jsx";
 import { BrowserRouter as Router } from "react-router-dom";
 import "./index.css";
 import * as Sentry from "@sentry/react";
-import "./sentryConfig";
+/* import "./sentryConfig"; */
 
 Sentry.init({
   dsn: "https://6c1f935c82494e05dd9ef7ea37706a04@o4507804386852864.ingest.us.sentry.io/4507804548857856",
