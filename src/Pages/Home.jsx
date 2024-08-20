@@ -5,7 +5,6 @@ function Home() {
   return (
     <>
       <div style={HomeContainerStyle}>
-        <button onClick={() => methodDoesNotExist()}>Break the world</button>;
         <Container className="d-flex justify-content-center align-items-center vh-100">
           <Row className="justify-content-center w-100">
             <h1 style={{ fontSize: "70px", color: "white" }}>
@@ -32,5 +31,3 @@ const HomeContainerStyle = {
   display: "flex",
   justifyContent: "center",
 };
-
-/* ../src/assets/chatgroup.png */

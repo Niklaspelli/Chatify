@@ -1,6 +1,6 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import fakeAuth from "../../src/Auth/fakeAuth";
+import fakeAuth from "./fakeAuth";
 
 const ProtectedRoute = () => {
   const isAuthenticated = fakeAuth.checkAuth();

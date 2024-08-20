@@ -107,7 +107,7 @@ const Login = () => {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                style={{ backgroundColor: "grey", color: "white" }}
+                style={{ backgroundColor: "185bac", color: "white" }}
                 aria-label="Username"
                 aria-required="true"
               />
@@ -121,7 +121,7 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="mr-sm-5 centered-placeholder"
                 style={{
-                  backgroundColor: "grey",
+                  backgroundColor: "185bac",
                   color: "white",
                   width: "200px;",
                 }}
@@ -131,7 +131,7 @@ const Login = () => {
             </Form.Floating>
             <div className="login-container">
               <Button
-                style={{ backgroundColor: "black" }}
+                style={{ backgroundColor: "#185bac" }}
                 className="login-button"
                 type="submit"
                 onClick={login}
@@ -141,7 +141,7 @@ const Login = () => {
                 Logga in
               </Button>
               <Button
-                style={{ backgroundColor: "black", margin: "20px" }}
+                style={{ backgroundColor: "#185bac", margin: "20px" }}
                 type="submit"
                 onClick={() => navigate("/register")}
               >

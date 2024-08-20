@@ -1,3 +1,4 @@
+import React from "react";
 import { useRef, useState, useEffect } from "react";
 import {
   faCheck,
@@ -229,7 +230,7 @@ function Register() {
                     onFocus={() => setUserFocus(true)}
                     onBlur={() => setUserFocus(false)}
                     style={{
-                      backgroundColor: "grey",
+                      backgroundColor: "185bac",
                       color: "white",
                       border: "none",
                     }}
@@ -273,7 +274,7 @@ function Register() {
                     onFocus={() => setEmailFocus(true)}
                     onBlur={() => setEmailFocus(false)}
                     style={{
-                      backgroundColor: "grey",
+                      backgroundColor: "185bac",
                       color: "white",
                       border: "none",
                     }}
@@ -322,7 +323,7 @@ function Register() {
                     onFocus={() => setPwdFocus(true)}
                     onBlur={() => setPwdFocus(false)}
                     style={{
-                      backgroundColor: "grey",
+                      backgroundColor: "185bac",
                       color: "white",
                       border: "none",
                     }}
@@ -372,7 +373,7 @@ function Register() {
                     required
                     aria-invalid={validMatch ? "false" : "true"}
                     style={{
-                      backgroundColor: "grey",
+                      backgroundColor: "185bac",
                       color: "white",
                       border: "none",
                     }}
@@ -388,7 +389,7 @@ function Register() {
                   Måste matcha det första lösenordet.
                 </p>
                 <Button
-                  style={{ backgroundColor: "black", margin: "20px" }}
+                  style={{ backgroundColor: "#185bac", margin: "20px" }}
                   type="submit"
                   disabled={
                     !validName || !validPwd || !validMatch || !validEmail

@@ -38,12 +38,15 @@ const MessageList = ({ posts, onDelete, id, users }) => {
           >
             <div
               style={{
-                backgroundColor: isCurrentUser ? "#3c3c3c" : "black",
+                backgroundColor: isCurrentUser
+                  ? "rgb(133, 85, 171)"
+                  : "#087d7f",
                 color: isCurrentUser ? "white" : "white",
                 padding: "10px",
                 borderRadius: "10px",
+                border: "5px solid white",
                 maxWidth: "60%",
-                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                boxShadow: "0 5px 6px rgba(0, 0, 0, 0.1)",
                 display: "flex",
                 alignItems: "center",
                 flexDirection: isCurrentUser ? "row-reverse" : "row",
