@@ -46,9 +46,17 @@ const Navbar = () => {
                 <Link to={"/chat"}>Chat</Link>
               </li>
               <li>
-                <span onClick={logout} style={{ cursor: "pointer" }}>
+                <div
+                  onClick={logout}
+                  style={{
+                    cursor: "pointer",
+                    display: "flex",
+                    position: "relative",
+                    left: "30px",
+                  }}
+                >
                   Logout
-                </span>
+                </div>
               </li>
             </>
           )}

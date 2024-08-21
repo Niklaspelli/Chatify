@@ -63,12 +63,13 @@ const IncomingMessages = ({ token, currentUserId, id, users }) => {
 
   return (
     <div>
-      <h2>Hämta din chatt med ConversationId :)</h2>
+      <h2 style={{ margin: "20px" }}>Hämta din chatt med ConversationId</h2>
       <input
         type="text"
         placeholder="Enter conversation ID"
         value={conversationId}
         onChange={(e) => setConversationId(e.target.value)}
+        style={inputStyle}
       />
       <button onClick={handleFetchMessages}>Hämta chatt</button>
 
@@ -76,7 +77,9 @@ const IncomingMessages = ({ token, currentUserId, id, users }) => {
       {error && <p>Error: {error}</p>}
 
       {!isLoading && !error && messages.length === 0 && (
-        <p>No messages found for this conversation ID.</p>
+        <p style={{ margin: "20px" }}>
+          No messages found for this conversation ID.
+        </p>
       )}
 
       {!isLoading && messages.length > 0 && (
@@ -89,6 +92,18 @@ const IncomingMessages = ({ token, currentUserId, id, users }) => {
       )}
     </div>
   );
+};
+
+const inputStyle = {
+  width: "100%",
+  maxWidth: "400px",
+  padding: "10px",
+  borderRadius: "20px",
+  border: "1px solid #ddd",
+  boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+  outline: "none",
+  fontSize: "16px",
+  transition: "border-color 0.3s ease",
 };
 
 export default IncomingMessages;

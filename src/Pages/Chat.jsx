@@ -100,7 +100,7 @@ const Chat = () => {
       <div style={ChatContainerStyle}>
         {username && (
           <h2>
-            <p>
+            <p style={{ marginTop: "50px" }}>
               Du är inloggad som:
               <span className="username">{username}</span>
             </p>

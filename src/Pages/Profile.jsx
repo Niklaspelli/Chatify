@@ -153,80 +153,99 @@ const Profile = () => {
   return (
     <div>
       <div style={ProfileContainerStyle}>
-        {error && (
-          <div role="alert" className="ml-1 mt-4 w-52 alert alert-error">
-            <span className="text-xs text-center">{error}</span>
-          </div>
-        )}
-
-        <div className="selected-picture">
-          <h4>Din valda bild:</h4>
-          <img
-            src={selectedPicture}
-            alt="Selected Avatar"
-            style={{ width: "200px", height: "200px", borderRadius: "50%" }}
-          />
-        </div>
-
-        <Button
-          style={{ backgroundColor: "black", margin: "20px" }}
-          onClick={openPictureModal}
-        >
-          Välj profilbild
-        </Button>
-        <div className="center">
-          <Modal
-            show={showPictureModal}
-            onHide={() => setShowPictureModal(false)}
-            centered
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>Välj en profilbild</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <div className="picture-options">
-                <img
-                  src={tempPicture}
-                  alt="Avatar"
-                  className="picture"
-                  onClick={handlePictureSelect}
-                  style={{
-                    cursor: "pointer",
-                    width: "100px",
-                    height: "100px",
-                    borderRadius: "50%",
-                  }}
-                />
+        <div className="recipe-container">
+          <div className="recipe-list">
+            {error && (
+              <div role="alert" className="ml-1 mt-4 w-52 alert alert-error">
+                <span className="text-xs text-center">{error}</span>
               </div>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="primary" onClick={handleSavePicture}>
-                Spara
-              </Button>
-            </Modal.Footer>
-          </Modal>
-        </div>
+            )}
 
-        {!showConfirmation ? (
-          <Button
-            style={{ backgroundColor: "red", margin: "20px" }}
-            onClick={handleConfirmDelete}
-            disabled={isLoading}
-            aria-busy={isLoading}
-          >
-            {isLoading ? "Deleting..." : "Delete Account"}
-          </Button>
-        ) : (
-          <div className="confirmation-prompt">
-            <p>Är du säker att vill radera kontot?</p>
-            <button onClick={handleConfirmAction} className="btn btn-primary">
-              Ja
-            </button>
-            <button onClick={handleCancelDelete} className="btn btn-secondary">
-              Nej
-            </button>
+            <div className="selected-picture">
+              <h4>Din valda bild:</h4>
+              <img
+                src={selectedPicture}
+                alt="Selected Avatar"
+                style={{ width: "200px", height: "200px", borderRadius: "50%" }}
+              />
+            </div>
+
+            <Button
+              style={{ backgroundColor: "black", margin: "20px" }}
+              onClick={openPictureModal}
+            >
+              Välj profilbild
+            </Button>
+            <div className="center">
+              <Modal
+                show={showPictureModal}
+                onHide={() => setShowPictureModal(false)}
+                centered
+              >
+                <Modal.Header
+                  closeButton
+                  style={{ justifyContent: "center", display: "flex" }}
+                >
+                  <Modal.Title
+                    style={{ justifyContent: "center", display: "flex" }}
+                  >
+                    Välj en profilbild
+                  </Modal.Title>
+                </Modal.Header>
+                <Modal.Body
+                  style={{ justifyContent: "center", display: "flex" }}
+                >
+                  <img
+                    src={tempPicture}
+                    alt="Avatar"
+                    className="picture"
+                    onClick={handlePictureSelect}
+                    style={{
+                      cursor: "pointer",
+                      width: "100px",
+                      height: "100px",
+                      borderRadius: "50%",
+                    }}
+                  />
+                </Modal.Body>
+                <Modal.Footer
+                  style={{ justifyContent: "center", display: "flex" }}
+                >
+                  <Button variant="primary" onClick={handleSavePicture}>
+                    Spara
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+            </div>
+
+            {!showConfirmation ? (
+              <Button
+                style={{ backgroundColor: "red", margin: "20px" }}
+                onClick={handleConfirmDelete}
+                disabled={isLoading}
+                aria-busy={isLoading}
+              >
+                {isLoading ? "Deleting..." : "Delete Account"}
+              </Button>
+            ) : (
+              <div className="confirmation-prompt">
+                <p>Är du säker att vill radera kontot?</p>
+                <button
+                  onClick={handleConfirmAction}
+                  className="btn btn-primary"
+                >
+                  Ja
+                </button>
+                <button
+                  onClick={handleCancelDelete}
+                  className="btn btn-secondary"
+                >
+                  Nej
+                </button>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

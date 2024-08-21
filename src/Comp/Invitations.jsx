@@ -37,7 +37,7 @@ function Invitations({ token, id, users }) {
 
   return (
     <div style={InvitationsContainerStyle}>
-      <h2>Dina inbjudningar!</h2>
+      <h2 style={{ margin: "10px" }}>Dina inbjudningar!</h2>
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
       {!loading && !error && (

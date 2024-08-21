@@ -94,70 +94,72 @@ const Login = () => {
 
   return (
     <div style={LoginContainerStyle}>
-      <Container className="d-flex justify-content-center align-items-center vh-100">
-        <Row className="justify-content-center w-100">
-          <Col md={6} lg={4}>
-            <div className="text-center mb-4">
-              <h2>Logga in:</h2>
-            </div>
-            <label htmlFor="floatingInputCustom">Användarnamn:</label>
-            <Form.Floating className="mb-1">
-              <Form.Control
-                id="floatingInputCustom"
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                style={{ backgroundColor: "185bac", color: "white" }}
-                aria-label="Username"
-                aria-required="true"
-              />
-            </Form.Floating>
-            <label htmlFor="floatingInputCustom">Lösenord:</label>
-            <Form.Floating className="mb-2" inline style={{ width: "400px" }}>
-              <Form.Control
-                id="floatingInputCustom"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="mr-sm-5 centered-placeholder"
-                style={{
-                  backgroundColor: "185bac",
-                  color: "white",
-                  width: "200px;",
-                }}
-                aria-label="Password"
-                aria-required="true"
-              />
-            </Form.Floating>
-            <div className="login-container">
-              <Button
-                style={{ backgroundColor: "#185bac" }}
-                className="login-button"
-                type="submit"
-                onClick={login}
-                disabled={isLoading}
-                aria-busy={isLoading ? "Loggar in..." : "Logga in"}
-              >
-                Logga in
-              </Button>
-              <Button
-                style={{ backgroundColor: "#185bac", margin: "20px" }}
-                type="submit"
-                onClick={() => navigate("/register")}
-              >
-                Skapa
-              </Button>
-            </div>
-            {correctCredentials === false && (
-              <div role="alert" className="ml-1 mt-4 w-52 alert alert-error">
-                <span className="text-xs text-center">
-                  Wrong username or password, try again!
-                </span>
+      <div className="container">
+        <Container>
+          <Row className="justify-content-center w-100">
+            <Col md={6} lg={4} className="justify-content-center">
+              <div className="text-center mb-4">
+                <h2>Logga in:</h2>
               </div>
-            )}
-          </Col>
-        </Row>
-      </Container>
+              <label htmlFor="floatingInputCustom">Användarnamn:</label>
+              <Form.Floating className="mb-1">
+                <Form.Control
+                  id="floatingInputCustom"
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  style={{ backgroundColor: "185bac", color: "white" }}
+                  aria-label="Username"
+                  aria-required="true"
+                />
+              </Form.Floating>
+              <label htmlFor="floatingInputCustom">Lösenord:</label>
+              <Form.Floating className="mb-2" inline style={{ width: "400px" }}>
+                <Form.Control
+                  id="floatingInputCustom"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="mr-sm-5 centered-placeholder"
+                  style={{
+                    backgroundColor: "185bac",
+                    color: "white",
+                    width: "200px;",
+                  }}
+                  aria-label="Password"
+                  aria-required="true"
+                />
+              </Form.Floating>
+              <div className="login-container">
+                <Button
+                  style={{ backgroundColor: "#185bac" }}
+                  className="login-button"
+                  type="submit"
+                  onClick={login}
+                  disabled={isLoading}
+                  aria-busy={isLoading ? "Loggar in..." : "Logga in"}
+                >
+                  Logga in
+                </Button>
+                <Button
+                  style={{ backgroundColor: "#185bac", margin: "20px" }}
+                  type="submit"
+                  onClick={() => navigate("/register")}
+                >
+                  Skapa
+                </Button>
+              </div>
+              {correctCredentials === false && (
+                <div role="alert" className="ml-1 mt-4 w-52 alert alert-error">
+                  <span className="text-xs text-center">
+                    Wrong username or password, try again!
+                  </span>
+                </div>
+              )}
+            </Col>
+          </Row>
+        </Container>
+      </div>
     </div>
   );
 };

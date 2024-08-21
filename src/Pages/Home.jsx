@@ -1,5 +1,6 @@
 import React from "react";
 import { Container, Button, Col, Row } from "react-bootstrap";
+import "../index.css";
 
 function Home() {
   return (
@@ -7,7 +8,9 @@ function Home() {
       <div style={HomeContainerStyle}>
         <Container className="d-flex justify-content-center align-items-center vh-100">
           <Row className="justify-content-center w-100">
-            <h1 style={{ fontSize: "70px", color: "white" }}>
+            <h1
+              className="homeH1" /* style={{ fontSize: "70px", color: "white" }} */
+            >
               Välkommen till Chatify!
             </h1>
             <div style={{ color: "white", fontSize: "40px" }}>

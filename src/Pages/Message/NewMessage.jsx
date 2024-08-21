@@ -163,44 +163,48 @@ const NewMessage = ({ token, id }) => {
 
   return (
     <div style={LoginContainerStyle}>
-      <Container>
-        {loading ? (
-          <p>Laddar meddelanden...</p>
-        ) : (
-          <IncomingMessages
-            posts={posts}
-            token={token}
-            onDelete={handleDelete}
-            onReply={handleReply}
-            id={id}
-            users={users}
-          />
-        )}
-        <h2>Svara:</h2>
+      <div style={containerStyle}>
+        <Container>
+          {loading ? (
+            <p>Laddar meddelanden...</p>
+          ) : (
+            <IncomingMessages
+              posts={posts}
+              token={token}
+              onDelete={handleDelete}
+              onReply={handleReply}
+              id={id}
+              users={users}
+            />
+          )}
+          <h2 style={{ margin: "20px" }}>Svara:</h2>
 
-        {error && <div style={{ color: "red" }}>Error: {error}</div>}
-        <label>Fyll i ditt ConversationId för att starta chatten:</label>
-        <Form.Floating className="mb-2" inline style={{ width: "400px" }}>
-          <input
-            type="text"
-            placeholder="Conversation ID"
-            value={conversationId}
-            onChange={(e) => setConversationId(e.target.value)}
-            disabled={sending}
-          />
-        </Form.Floating>
-        <Form.Floating className="mb-2" inline style={{ width: "400px" }}>
-          <textarea
-            placeholder="Meddelande:"
-            value={newPostContent}
-            onChange={(e) => setNewPostContent(e.target.value)}
-            disabled={sending}
-          ></textarea>
-        </Form.Floating>
-        <button onClick={handleCreatePost} disabled={sending}>
-          {sending ? "Skickar..." : "Skicka"}
-        </button>
-      </Container>
+          {error && <div style={{ color: "red" }}>Error: {error}</div>}
+          <label style={{ margin: "20px" }}>
+            Fyll i ditt ConversationId för att starta chatten:
+          </label>
+          <Form.Floating className="mb-2" style={{ width: "400px" }} inline>
+            <input
+              type="text"
+              placeholder="Conversation ID"
+              value={conversationId}
+              onChange={(e) => setConversationId(e.target.value)}
+              disabled={sending}
+            />
+          </Form.Floating>
+          <Form.Floating className="mb-2" style={{ width: "400px" }} inline>
+            <textarea
+              placeholder="Meddelande:"
+              value={newPostContent}
+              onChange={(e) => setNewPostContent(e.target.value)}
+              disabled={sending}
+            ></textarea>
+          </Form.Floating>
+          <button onClick={handleCreatePost} disabled={sending}>
+            {sending ? "Skickar..." : "Skicka"}
+          </button>
+        </Container>
+      </div>
     </div>
   );
 };
@@ -209,6 +213,12 @@ const LoginContainerStyle = {
   marginBottom: "15px",
   display: "flex",
   justifyContent: "center",
+};
+
+const containerStyle = {
+  maxWidth: "1000px",
+  margin: "0 auto",
+  textAlign: "center",
 };
 
 export default NewMessage;

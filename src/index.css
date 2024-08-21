@@ -1,3 +1,10 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -152,6 +159,7 @@ button {
 
 
 textarea {
+  display: flex;
   border-radius: 15px;
   color: white;
   background-color: #185bac;
@@ -267,6 +275,8 @@ input[type=text],
   overflow-y: auto;
   border: 1px solid #ddd;
   padding: 10px;
+  display: block;
+  right: 20px;
 }
 
 
@@ -285,6 +295,7 @@ input[type=text],
   z-index: 1;
   overflow-y: auto;
   max-height: 600px;
+
 }
 
 .dropdown:hover .dropdown-content {
@@ -316,4 +327,94 @@ input[type=text],
   height: 60vh;
   width: 60vw;
   border-radius: 50px;
+}
+
+.homeH1 {
+  font-size: 70px;
+  position: relative;
+}
+
+@media screen and (min-width: 360px) {
+
+  .homeH1 {
+    font-size: 40px;
+    position: relative;
+  }
+
+  .instructionBox,
+  .recipe-img,
+  .recipe-list {
+    flex-direction: column;
+    place-content: center;
+    text-align: center;
+    align-items: center;
+  }
+
+  .recipe-container {
+    flex-direction: column;
+    place-content: center;
+    margin-left: 50px;
+
+  }
+
+}
+
+
+
+
+@media screen and (max-width: 600px) {
+  .topnav .search-container {
+    float: none;
+  }
+
+  svg {
+    position: absolute;
+    top: 9%;
+    right: 15%;
+    transform: translate(100%, -50%);
+    color: white;
+  }
+
+  .topnav a,
+  .topnav input[type=text],
+  .topnav .search-container button {
+    float: none;
+    display: block;
+    text-align: left;
+    width: 100%;
+    margin: 0;
+    padding: 14px;
+  }
+
+  .topnav input[type=text] {
+    border: 1px solid #ccc;
+  }
+}
+
+.imageMeals,
+.mealSelection {
+  flex-direction: column;
+  place-content: center;
+  text-align: center;
+
+}
+
+.instructionBox,
+.recipe-img,
+.recipe-list {
+  flex-direction: column;
+  place-content: center;
+
+}
+
+.recipe-container {
+  flex-direction: column;
+  place-content: center;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+
 }
