@@ -5,11 +5,13 @@
 }
 
 
+
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  min-height: 100vh;
+  min-height: 125vh;
   color-scheme: rgb(12, 9, 9);
   color: rgba(255, 255, 255, 0.87);
   background: linear-gradient(#230d55, #0a315e);
@@ -159,7 +161,7 @@ button {
 
 
 textarea {
-  display: flex;
+
   border-radius: 15px;
   color: white;
   background-color: #185bac;
@@ -167,9 +169,9 @@ textarea {
   resize: none;
   height: 100px;
   border: none;
-  width: 100%;
+  width: 90%;
   padding: 10px 15px;
-  margin: 8px 0;
+  margin: 20px 0;
 
 }
 
@@ -183,7 +185,7 @@ input[type=text],
   color: white;
   background-color: #185bac;
   border: none;
-  width: 100%;
+  width: 90%;
   padding: 10px 15px;
   margin: 8px 0;
   box-sizing: border-box;

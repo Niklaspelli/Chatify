@@ -13,7 +13,14 @@ function Home() {
             >
               Välkommen till Chatify!
             </h1>
-            <div style={{ color: "white", fontSize: "40px" }}>
+            <div
+              style={{
+                color: "white",
+                fontSize: "30px",
+                display: "flow",
+                float: "right",
+              }}
+            >
               Hitta din bästis och börja prata redan idag!
             </div>
           </Row>

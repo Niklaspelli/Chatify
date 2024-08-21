@@ -78,17 +78,17 @@ const NewMessage = ({ token, id }) => {
     const sanitizedText = DOMPurify.sanitize(newPostContent);
 
     if (!sanitizedText.trim()) {
-      setError("Message content cannot be empty");
+      setError("Kan ej vara tomt");
       return;
     }
 
     if (!conversationId.trim()) {
-      setError("Conversation ID cannot be empty");
+      setError("Conversation ID kan inte vara tomt");
       return;
     }
 
     if (!currentUser) {
-      setError("User information not available");
+      setError("Användarinformation ej tillgängligt");
       return;
     }
 
@@ -163,7 +163,7 @@ const NewMessage = ({ token, id }) => {
 
   return (
     <div style={LoginContainerStyle}>
-      <div style={containerStyle}>
+      <div>
         <Container>
           {loading ? (
             <p>Laddar meddelanden...</p>
@@ -183,21 +183,24 @@ const NewMessage = ({ token, id }) => {
           <label style={{ margin: "20px" }}>
             Fyll i ditt ConversationId för att starta chatten:
           </label>
-          <Form.Floating className="mb-2" style={{ width: "400px" }} inline>
+          <Form.Floating className="mb-2" inline>
             <input
               type="text"
               placeholder="Conversation ID"
               value={conversationId}
               onChange={(e) => setConversationId(e.target.value)}
               disabled={sending}
+              style={inputStyle}
             />
           </Form.Floating>
-          <Form.Floating className="mb-2" style={{ width: "400px" }} inline>
+          <Form.Floating className="mb-2" inline>
             <textarea
+              type="text"
               placeholder="Meddelande:"
               value={newPostContent}
               onChange={(e) => setNewPostContent(e.target.value)}
               disabled={sending}
+              style={inputStyle}
             ></textarea>
           </Form.Floating>
           <button onClick={handleCreatePost} disabled={sending}>
@@ -215,10 +218,16 @@ const LoginContainerStyle = {
   justifyContent: "center",
 };
 
-const containerStyle = {
-  maxWidth: "1000px",
-  margin: "0 auto",
-  textAlign: "center",
+const inputStyle = {
+  width: "90%",
+  maxWidth: "400px",
+  padding: "10px",
+  borderRadius: "20px",
+  border: "1px solid #ddd",
+  boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+  outline: "none",
+  fontSize: "16px",
+  transition: "border-color 0.3s ease",
 };
 
 export default NewMessage;

@@ -96,11 +96,10 @@ const Login = () => {
     <div style={LoginContainerStyle}>
       <div className="container">
         <Container>
-          <Row className="justify-content-center w-100">
-            <Col md={6} lg={4} className="justify-content-center">
-              <div className="text-center mb-4">
-                <h2>Logga in:</h2>
-              </div>
+          <Row className="justify-content-center align-items-center h-100">
+            <Col md={8} lg={4} className="justify-content-center">
+              <h2>Logga in:</h2>
+
               <label htmlFor="floatingInputCustom">Användarnamn:</label>
               <Form.Floating className="mb-1">
                 <Form.Control

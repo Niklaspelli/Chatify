@@ -95,7 +95,7 @@ const IncomingMessages = ({ token, currentUserId, id, users }) => {
 };
 
 const inputStyle = {
-  width: "100%",
+  width: "90%",
   maxWidth: "400px",
   padding: "10px",
   borderRadius: "20px",

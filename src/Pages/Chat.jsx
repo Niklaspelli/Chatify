@@ -102,7 +102,7 @@ const Chat = () => {
           <h2>
             <p style={{ marginTop: "50px" }}>
               Du är inloggad som:
-              <span className="username">{username}</span>
+              <span className="username"> {username}</span>
             </p>
           </h2>
         )}
