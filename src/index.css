@@ -333,15 +333,12 @@ input[type=text],
 
 .homeH1 {
   font-size: 70px;
-  position: relative;
+
+
 }
 
 @media screen and (min-width: 360px) {
 
-  .homeH1 {
-    font-size: 40px;
-    position: relative;
-  }
 
   .instructionBox,
   .recipe-img,

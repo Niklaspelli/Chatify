@@ -6,14 +6,14 @@ import DOMPurify from "dompurify";
 
 const NewMessage = ({ token, id }) => {
   const [newPostContent, setNewPostContent] = useState("");
-  const [conversationId, setConversationId] = useState(""); // State to hold conversationId
+  const [conversationId, setConversationId] = useState("");
   const [posts, setPosts] = useState([]);
   const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [sending, setSending] = useState(false);
-  const [replyToMessageId, setReplyToMessageId] = useState(null); // State to track the message being replied to
+  const [replyToMessageId, setReplyToMessageId] = useState(null);
 
   useEffect(() => {
     fetchPosts();
@@ -37,6 +37,9 @@ const NewMessage = ({ token, id }) => {
       }
       const data = await response.json();
       setPosts(data);
+      // här skulle du behöva uppdatera messages från IncomingMessages komponenten för att det ska synas direkt
+      // typ: setMessages([...messages, data])
+      // du behöver alltså exportera messages, setMessages från providern och lyfta in här
 
       if (data.length > 0) {
         setConversationId(data[0].conversationId);

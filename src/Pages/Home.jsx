@@ -8,11 +8,7 @@ function Home() {
       <div style={HomeContainerStyle}>
         <Container className="d-flex justify-content-center align-items-center vh-100">
           <Row className="justify-content-center w-100">
-            <h1
-              className="homeH1" /* style={{ fontSize: "70px", color: "white" }} */
-            >
-              Välkommen till Chatify!
-            </h1>
+            <div className="homeH1">Välkommen till Chatify!</div>
             <div
               style={{
                 color: "white",

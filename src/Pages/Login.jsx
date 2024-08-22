@@ -100,10 +100,10 @@ const Login = () => {
             <Col md={8} lg={4} className="justify-content-center">
               <h2>Logga in:</h2>
 
-              <label htmlFor="floatingInputCustom">Användarnamn:</label>
+              <label htmlFor="floatingInputCustom1">Användarnamn:</label>
               <Form.Floating className="mb-1">
                 <Form.Control
-                  id="floatingInputCustom"
+                  id="floatingInputCustom1"
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
@@ -112,10 +112,10 @@ const Login = () => {
                   aria-required="true"
                 />
               </Form.Floating>
-              <label htmlFor="floatingInputCustom">Lösenord:</label>
+              <label htmlFor="floatingInputCustom2">Lösenord:</label>
               <Form.Floating className="mb-2" inline style={{ width: "400px" }}>
                 <Form.Control
-                  id="floatingInputCustom"
+                  id="floatingInputCustom2"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
