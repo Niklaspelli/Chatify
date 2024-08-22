@@ -34,6 +34,23 @@ const Login = () => {
     }
   };
 
+  const base64UrlToBase64 = (base64Url) => {
+    return base64Url
+      .replace(/-/g, "+")
+      .replace(/_/g, "/")
+      .concat("==".slice(0, (4 - (base64Url.length % 4)) % 4));
+  };
+
+  const decodeJwt = (token) => {
+    try {
+      const base64Url = token.split(".")[1];
+      const base64 = base64UrlToBase64(base64Url);
+      return JSON.parse(atob(base64));
+    } catch (error) {
+      throw new Error("Token decoding failed: " + error.message);
+    }
+  };
+
   const login = async () => {
     if (!username || !password) {
       setCorrectCredentials(false);
@@ -64,13 +81,13 @@ const Login = () => {
       }
 
       const token = data.token;
+      console.log("Raw token:", token);
 
-      const decodedToken = JSON.parse(atob(token.split(".")[1]));
-
+      // Decode the JWT token
+      const decodedToken = decodeJwt(token);
       console.log("Decoded Token Payload:", decodedToken);
 
       const id = decodedToken.id;
-
       console.log("Token:", token);
       console.log("Id:", id);
 
@@ -107,7 +124,7 @@ const Login = () => {
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  style={{ backgroundColor: "185bac", color: "white" }}
+                  style={{ backgroundColor: "#185bac", color: "white" }}
                   aria-label="Username"
                   aria-required="true"
                 />
@@ -121,7 +138,7 @@ const Login = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   className="mr-sm-5 centered-placeholder"
                   style={{
-                    backgroundColor: "185bac",
+                    backgroundColor: "#185bac",
                     color: "white",
                   }}
                   aria-label="Password"

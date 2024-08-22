@@ -45,11 +45,12 @@ const MessageList = ({ posts, onDelete, id, users }) => {
                 padding: "10px",
                 borderRadius: "10px",
                 border: "5px solid white",
-                maxWidth: "60%",
-                boxShadow: "0 5px 6px rgba(0, 0, 0, 0.1)",
                 display: "flex",
                 alignItems: "center",
                 flexDirection: isCurrentUser ? "row-reverse" : "row",
+                textAlign: "left",
+                maxWidth: "75%",
+                wordWrap: "break-word",
               }}
             >
               <img
@@ -70,7 +71,13 @@ const MessageList = ({ posts, onDelete, id, users }) => {
                 >
                   {UserNameId(post.userId)}
                 </p>
-                <p style={{ margin: "5px 0" }}>{post.text}</p>
+                <p
+                  style={{
+                    margin: "5px 0",
+                  }}
+                >
+                  {post.text}
+                </p>
                 <p style={{ fontSize: "0.8em", color: "white" }}>
                   Sent: {new Date(post.createdAt).toLocaleString()}
                 </p>
