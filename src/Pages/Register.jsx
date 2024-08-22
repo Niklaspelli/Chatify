@@ -1,4 +1,6 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
 import { useRef, useState, useEffect } from "react";
 import {
   faCheck,
@@ -8,6 +10,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Row, Col } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
+import "../index.css";
 
 const USER_REGEX = /^[A-Öa-ö][A-z0-9-_åäöÅÄÖ]{3,23}$/;
 const PWD_REGEX =
@@ -20,6 +23,7 @@ const register = import.meta.env.VITE_REGISTER;
 function Register() {
   const userRef = useRef();
   const errRef = useRef();
+  const navigate = useNavigate();
 
   const [user, setUser] = useState("");
   const [validName, setValidName] = useState(false);
@@ -186,9 +190,15 @@ function Register() {
         {success ? (
           <section>
             <h1>Lyckad registrering!</h1>
-            <p>
-              <a href="/login">Logga in</a>
-            </p>
+            <div style={HomeContainerStyle}>
+              <Button
+                style={{ backgroundColor: "#185bac", margin: "20px" }}
+                type="submit"
+                onClick={() => navigate("/login")}
+              >
+                Logga in
+              </Button>
+            </div>
           </section>
         ) : (
           <section>
@@ -199,6 +209,7 @@ function Register() {
             >
               {errMsg}
             </p>
+
             <form onSubmit={handleSubmit}>
               <Row className="justify-content-center align-items-center h-100">
                 <h2>Skapa Konto</h2>
@@ -410,10 +421,17 @@ function Register() {
   );
 }
 
+export default Register;
+
 const RegisterContainerStyle = {
   marginBottom: "15px",
   display: "flex",
   justifyContent: "center",
 };
 
-export default Register;
+const HomeContainerStyle = {
+  marginTop: "50px",
+  marginBottom: "15px",
+  display: "flex",
+  justifyContent: "center",
+};

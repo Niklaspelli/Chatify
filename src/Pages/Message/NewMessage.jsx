@@ -186,7 +186,7 @@ const NewMessage = ({ token, id }) => {
           <label style={{ margin: "20px" }}>
             Fyll i ditt ConversationId för att starta chatten:
           </label>
-          <Form.Floating className="mb-2" inline>
+          <Form.Floating className="mb-2">
             <input
               type="text"
               placeholder="Conversation ID"
@@ -196,7 +196,7 @@ const NewMessage = ({ token, id }) => {
               style={inputStyle}
             />
           </Form.Floating>
-          <Form.Floating className="mb-2" inline>
+          <Form.Floating className="mb-2">
             <textarea
               type="text"
               placeholder="Meddelande:"

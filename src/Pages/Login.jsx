@@ -113,7 +113,7 @@ const Login = () => {
                 />
               </Form.Floating>
               <label htmlFor="floatingInputCustom2">Lösenord:</label>
-              <Form.Floating className="mb-2" inline style={{ width: "400px" }}>
+              <Form.Floating className="mb-2" style={{ width: "400px" }}>
                 <Form.Control
                   id="floatingInputCustom2"
                   type="password"
@@ -123,7 +123,6 @@ const Login = () => {
                   style={{
                     backgroundColor: "185bac",
                     color: "white",
-                    width: "200px;",
                   }}
                   aria-label="Password"
                   aria-required="true"

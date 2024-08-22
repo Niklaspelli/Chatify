@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button, Modal } from "react-bootstrap";
 import "../index.css";
+
 const Profile = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const errRef = useRef(null);
 
   const stateToken = location.state?.token || "";
   const stateId = location.state?.id || "";
@@ -16,12 +18,14 @@ const Profile = () => {
   const [id, setId] = useState(stateId || localStorage.getItem("Id") || "");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [errMsg, setErrMsg] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showPictureModal, setShowPictureModal] = useState(false);
   const [selectedPicture, setSelectedPicture] = useState(
     localStorage.getItem("profilePicture") || "https://i.pravatar.cc/200"
   );
   const [tempPicture, setTempPicture] = useState(selectedPicture);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     const checkCredentials = async () => {
@@ -65,11 +69,13 @@ const Profile = () => {
       localStorage.removeItem("Id");
       localStorage.removeItem("profilePicture");
 
-      navigate("/login", {
-        state: { message: "Account deleted successfully." },
-      });
+      setSuccess(true);
     } catch (error) {
-      setError(`Delete request failed: ${error.message}`);
+      console.error("Registration error:", error);
+      setErrMsg(`${error.message}`);
+      if (errRef.current) {
+        errRef.current.focus();
+      }
     } finally {
       setIsLoading(false);
     }
@@ -153,99 +159,130 @@ const Profile = () => {
   return (
     <div>
       <div style={ProfileContainerStyle}>
-        <div className="recipe-container">
-          <div className="recipe-list">
-            {error && (
-              <div role="alert" className="ml-1 mt-4 w-52 alert alert-error">
-                <span className="text-xs text-center">{error}</span>
-              </div>
-            )}
-
-            <div className="selected-picture">
-              <h4>Din valda bild:</h4>
-              <img
-                src={selectedPicture}
-                alt="Selected Avatar"
-                style={{ width: "200px", height: "200px", borderRadius: "50%" }}
-              />
-            </div>
-
-            <Button
-              style={{ backgroundColor: "black", margin: "20px" }}
-              onClick={openPictureModal}
-            >
-              Välj profilbild
-            </Button>
-            <div className="center">
-              <Modal
-                show={showPictureModal}
-                onHide={() => setShowPictureModal(false)}
-                centered
+        {success ? (
+          <section>
+            <h1>Kontot raderat! Välkommen tillbaka!</h1>
+            <div style={HomeContainerStyle}>
+              <Button
+                style={{ backgroundColor: "#185bac", margin: "20px" }}
+                type="submit"
+                onClick={() => navigate("/register")}
               >
-                <Modal.Header
-                  closeButton
-                  style={{ justifyContent: "center", display: "flex" }}
-                >
-                  <Modal.Title
-                    style={{ justifyContent: "center", display: "flex" }}
+                Skapa
+              </Button>
+            </div>
+          </section>
+        ) : (
+          <section>
+            <p
+              ref={errRef}
+              className={errMsg ? "errmsg" : "offscreen"}
+              aria-live="assertive"
+            >
+              {errMsg}
+            </p>
+            <div className="recipe-container">
+              <div className="recipe-list">
+                {error && (
+                  <div
+                    role="alert"
+                    className="ml-1 mt-4 w-52 alert alert-error"
                   >
-                    Välj en profilbild
-                  </Modal.Title>
-                </Modal.Header>
-                <Modal.Body
-                  style={{ justifyContent: "center", display: "flex" }}
-                >
+                    <span className="text-xs text-center">{error}</span>
+                  </div>
+                )}
+
+                <div className="selected-picture">
+                  <h4>Din valda bild:</h4>
                   <img
-                    src={tempPicture}
-                    alt="Avatar"
-                    className="picture"
-                    onClick={handlePictureSelect}
+                    src={selectedPicture}
+                    alt="Selected Avatar"
                     style={{
-                      cursor: "pointer",
-                      width: "100px",
-                      height: "100px",
+                      width: "200px",
+                      height: "200px",
                       borderRadius: "50%",
                     }}
                   />
-                </Modal.Body>
-                <Modal.Footer
-                  style={{ justifyContent: "center", display: "flex" }}
-                >
-                  <Button variant="primary" onClick={handleSavePicture}>
-                    Spara
-                  </Button>
-                </Modal.Footer>
-              </Modal>
-            </div>
+                </div>
 
-            {!showConfirmation ? (
-              <Button
-                style={{ backgroundColor: "red", margin: "20px" }}
-                onClick={handleConfirmDelete}
-                disabled={isLoading}
-                aria-busy={isLoading}
-              >
-                {isLoading ? "Deleting..." : "Delete Account"}
-              </Button>
-            ) : (
-              <div className="confirmation-prompt">
-                <p>Är du säker att vill radera kontot?</p>
-                <button
-                  onClick={handleConfirmAction}
-                  className="btn btn-primary"
+                <Button
+                  style={{ backgroundColor: "black", margin: "20px" }}
+                  onClick={openPictureModal}
                 >
-                  Ja
-                </button>
-                <button
-                  onClick={handleCancelDelete}
-                  className="btn btn-secondary"
-                >
-                  Nej
-                </button>
+                  Välj profilbild
+                </Button>
+                <div className="center">
+                  <Modal
+                    show={showPictureModal}
+                    onHide={() => setShowPictureModal(false)}
+                    centered
+                  >
+                    <Modal.Header
+                      closeButton
+                      style={{ justifyContent: "center", display: "flex" }}
+                    >
+                      <Modal.Title
+                        style={{ justifyContent: "center", display: "flex" }}
+                      >
+                        Välj en profilbild
+                      </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body
+                      style={{ justifyContent: "center", display: "flex" }}
+                    >
+                      <img
+                        src={tempPicture}
+                        alt="Avatar"
+                        className="picture"
+                        onClick={handlePictureSelect}
+                        style={{
+                          cursor: "pointer",
+                          width: "100px",
+                          height: "100px",
+                          borderRadius: "50%",
+                        }}
+                      />
+                    </Modal.Body>
+                    <Modal.Footer
+                      style={{ justifyContent: "center", display: "flex" }}
+                    >
+                      <Button variant="primary" onClick={handleSavePicture}>
+                        Spara
+                      </Button>
+                    </Modal.Footer>
+                  </Modal>
+                </div>
+
+                {!showConfirmation ? (
+                  <Button
+                    style={{ backgroundColor: "red", margin: "20px" }}
+                    onClick={handleConfirmDelete}
+                    disabled={isLoading}
+                    aria-busy={isLoading}
+                  >
+                    {isLoading ? "Deleting..." : "Delete Account"}
+                  </Button>
+                ) : (
+                  <div className="confirmation-prompt">
+                    <p>Är du säker att vill radera kontot?</p>
+                    <button
+                      onClick={handleConfirmAction}
+                      className="btn btn-primary"
+                    >
+                      Ja
+                    </button>
+                    <button
+                      onClick={handleCancelDelete}
+                      className="btn btn-secondary"
+                    >
+                      Nej
+                    </button>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        </div>
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );
@@ -258,4 +295,11 @@ const ProfileContainerStyle = {
   display: "flex",
   justifyContent: "center",
   marginTop: "200px",
+};
+
+const HomeContainerStyle = {
+  marginTop: "50px",
+  marginBottom: "15px",
+  display: "flex",
+  justifyContent: "center",
 };
