@@ -11,7 +11,6 @@ const Profile = () => {
   const stateToken = location.state?.token || "";
   const stateId = location.state?.id || "";
 
-  // State initialization
   const [token, setToken] = useState(
     stateToken || localStorage.getItem("token") || ""
   );

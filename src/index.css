@@ -236,13 +236,13 @@ input[type=text],
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
-  background: #f9f9f9;
+  background: #142c94;
   margin-top: 20px;
   text-align: center;
 }
 
 .confirmation-prompt p {
-  color: black;
+  color: white;
   margin-bottom: 20px;
 }
 

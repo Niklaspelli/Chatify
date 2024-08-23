@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MessageList from "./MessageList";
 
 const IncomingMessages = ({ token, currentUserId, id, users }) => {
@@ -7,17 +7,26 @@ const IncomingMessages = ({ token, currentUserId, id, users }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const handleFetchMessages = async () => {
-    if (!conversationId) {
-      alert("Please enter a conversation ID");
-      return;
+  useEffect(() => {
+    const storedConversationId = localStorage.getItem("conversationId");
+    if (storedConversationId) {
+      setConversationId(storedConversationId);
+      fetchMessages(storedConversationId);
     }
+  }, []);
 
+  useEffect(() => {
+    if (conversationId) {
+      fetchMessages(conversationId);
+    }
+  }, [conversationId]);
+
+  const fetchMessages = async (id) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const url = `https://chatify-api.up.railway.app/messages?conversationId=${conversationId}`;
+      const url = `https://chatify-api.up.railway.app/messages?conversationId=${id}`;
       const response = await fetch(url, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -39,6 +48,16 @@ const IncomingMessages = ({ token, currentUserId, id, users }) => {
     }
   };
 
+  const handleFetchMessages = () => {
+    if (!conversationId) {
+      alert("Please enter a conversation ID");
+      return;
+    }
+
+    localStorage.setItem("conversationId", conversationId);
+    fetchMessages(conversationId);
+  };
+
   const handleDeleteMessage = async (postId) => {
     try {
       const response = await fetch(
@@ -55,7 +74,9 @@ const IncomingMessages = ({ token, currentUserId, id, users }) => {
         throw new Error(`Failed to delete message: ${response.statusText}`);
       }
 
-      setMessages(messages.filter((post) => post.id !== postId));
+      setMessages((prevMessages) =>
+        prevMessages.filter((post) => post.id !== postId)
+      );
     } catch (error) {
       console.error("Failed to delete message:", error.message);
     }

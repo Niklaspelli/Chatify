@@ -87,10 +87,6 @@ const Chat = () => {
     setMessages((prevMessages) => [newMessage, ...prevMessages]);
   };
 
-  /*   const handleConversationChange = (conversationId) => {
-    setSelectedConversationId(conversationId);
-  }; */
-
   if (loading) {
     return <p>Loading...</p>;
   }

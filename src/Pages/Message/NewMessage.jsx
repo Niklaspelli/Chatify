@@ -37,9 +37,6 @@ const NewMessage = ({ token, id }) => {
       }
       const data = await response.json();
       setPosts(data);
-      // här skulle du behöva uppdatera messages från IncomingMessages komponenten för att det ska synas direkt
-      // typ: setMessages([...messages, data])
-      // du behöver alltså exportera messages, setMessages från providern och lyfta in här
 
       if (data.length > 0) {
         setConversationId(data[0].conversationId);
@@ -124,7 +121,9 @@ const NewMessage = ({ token, id }) => {
       console.log("Created Post:", createdPost);
       setNewPostContent("");
       setReplyToMessageId(null);
-      setPosts((prevPosts) => [createdPost, ...prevPosts]);
+
+      // Re-fetch posts to update the list
+      fetchPosts();
     } catch (error) {
       setError(error.message);
     } finally {
@@ -148,7 +147,8 @@ const NewMessage = ({ token, id }) => {
         throw new Error("Failed to delete post");
       }
 
-      setPosts(posts.filter((post) => post.id !== msgID));
+      // Re-fetch posts to update the list
+      fetchPosts();
     } catch (error) {
       setError(error.message);
       console.error("Error deleting post:", error.message);

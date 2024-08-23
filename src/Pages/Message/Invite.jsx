@@ -61,25 +61,33 @@ function Invite({ id, token }) {
   };
 
   return (
-    <div>
-      <button onClick={sendInvite} disabled={loading}>
-        {loading ? "Sending..." : "Invite"}
-      </button>
+    <div style={containerInvite}>
       {inviteUrl && (
-        <div>
+        <li style={{ justifyContent: "center" }}>
           Invite sent! URL:{" "}
           <a href={inviteUrl} target="_blank" rel="noopener noreferrer">
             {inviteUrl}
           </a>
-        </div>
-      )}
+        </li>
+      )}{" "}
       {error && (
         <div role="alert" aria-live="assertive">
           {error}
         </div>
       )}
+      <button onClick={sendInvite} disabled={loading} style={buttonStyle}>
+        {loading ? "Sending..." : "Invite"}
+      </button>
     </div>
   );
 }
 
 export default Invite;
+
+const containerInvite = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "flex-start",
+};
+
+const buttonStyle = {};

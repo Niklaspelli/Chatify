@@ -1,6 +1,6 @@
 import React from "react";
 import Invite from "../../Pages/Message/Invite";
-import { alignJustify } from "fontawesome";
+import { alignCenter, alignJustify } from "fontawesome";
 
 const UserList = ({ users, token }) => {
   if (users.length === 0) {
@@ -19,9 +19,9 @@ const UserList = ({ users, token }) => {
   );
 };
 const userStyle = {
-  display: "inline",
-  position: "relative",
-  left: "50%",
+  display: "flex",
+
+  right: "50%",
   justifyContent: "center",
   marginBottom: "10px",
 };
